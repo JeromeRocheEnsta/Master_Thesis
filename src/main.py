@@ -1,3 +1,5 @@
+import os
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from env.wind_env import *
@@ -9,10 +11,19 @@ from typing import Callable
 
 gym.logger.set_level(40)
 
+
+###############
+#Output directory
+###############
+plot = False
+
+if len(sys.argv) > 1:
+    plot = True
+    os.mkdir(sys.argv[1])
+
 ###############
 #get the environment ready
 ###############
-
 
 discrete_maps = [[], []]
 
@@ -102,6 +113,11 @@ for i in range(len(prediction_magnitude)):
 
 
 plt.quiver(X, Y, U, V)
+
+if plot:
+    plt.savefig(sys.argv[1]+'/wind_field.png')
+
+
 plt.show()
 
 '''
@@ -173,6 +189,9 @@ axs[1,0].set_title('Heading angle versus time')
 
 axs[1,1].plot(env_ref.time[1:], env_ref.trajectory_action)
 axs[1,1].set_title('Action versus time')
+
+if plot:
+    plt.savefig(sys.argv[1]+'/ref_path.png')
 
 plt.show()
 
@@ -263,6 +282,9 @@ for _ in range(1):
 
     axs[1,1].plot(env.time[1:], env.trajectory_action)
     axs[1,1].set_title('Action versus time')
+
+    if plot:
+        plt.savefig(sys.argv[1]+'/deterministic_path.png')
     
     plt.show()
 
@@ -302,6 +324,9 @@ for episode in range(10):
     axs[1,1].plot(env.time[1:], env.trajectory_action)
     axs[1,1].set_title('Action versus time')
     
+    if plot:
+        plt.savefig(sys.argv[1]+'/stochastic_path_'+str(episode+1)+'.png')
+
     plt.show()
 
 print(done_count)
