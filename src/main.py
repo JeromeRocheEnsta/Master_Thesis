@@ -76,15 +76,12 @@ for i in range(len(prediction_magnitude)):
     Z_magnitude[row, col] = prediction_magnitude[i]
     # Z_direction[row, col] = prediction_direction[i]
 
-
+plt.figure(figsize=(6, 6))
 plt.contourf(X, Y, Z_magnitude, 20, cmap='coolwarm')
 plt.colorbar()
 plt.plot(start[0], start[1], 'ko', markersize = 10)
 plt.plot(target[0], target[1], 'k*', markersize = 10)
-#plt.show()
-# plt.contourf(X, Y, Z_direction, 20, cmap='RdGy')
-# plt.colorbar()
-# plt.show()
+
 
 localisation = []
 X = []
@@ -157,6 +154,7 @@ while env_ref._target() == False:
 
 ## Plot of the reference trajectory
 fig, axs = plt.subplots(nrows = 2, ncols = 2)
+fig.set_size_inches(10, 7)
 
 axs[0,0].plot(env_ref.trajectory_x, env_ref.trajectory_y, '-')
 a_circle = plt.Circle(target, radius = radius)
@@ -246,6 +244,7 @@ for _ in range(1):
         done_count += 1
 
     fig, axs = plt.subplots(2, 2)
+    fig.set_size_inches(10, 7)
     fig.suptitle('Trajectory: Deterministic (0 / 10); Propulsion: {}'.format(env.propulsion))
 
     axs[0,0].plot(env.trajectory_x, env.trajectory_y, '-')
@@ -283,6 +282,7 @@ for episode in range(10):
     
 
     fig, axs = plt.subplots(2, 2)
+    fig.set_size_inches(10, 7)
     fig.suptitle('Trajectory: Stochastic ({} / 10) ; Propulsion: {}'.format( episode + 1 , env.propulsion))
 
     axs[0,0].plot(env.trajectory_x, env.trajectory_y, '-')
