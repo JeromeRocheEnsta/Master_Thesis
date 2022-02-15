@@ -1,6 +1,7 @@
 import numpy as np
 from env.wind.wind_map import *
 import matplotlib.pyplot as plt
+plt.ioff()
 import random
 import gym
 from gym import spaces

@@ -1,4 +1,9 @@
 import numpy as np
+import matplotlib.pyplot as plt
+plt.ioff()
+from env.wind.wind_map import WindMap
+
+
 
 
 wind_info = [
@@ -12,6 +17,55 @@ wind_info = [
 ]
 
 wind_info_2 = [[(15, 270)]*7]*7
+
+
+def plot_wind_field(Wind, start, target):
+    localisation = []
+    X = []
+    Y = []
+    for i in range(101):
+        X.append(i * 1000/100)
+        Y.append(i* 1000/100)
+        for j in range(101):
+            localisation.append( (i* 1000/100, j*1000/100) )
+
+    prediction_magnitude = Wind._get_magnitude(localisation)
+    prediction_direction = Wind._get_direction(localisation)
+    Z_magnitude = np.zeros( (len(Y), len(X)) )
+    # Z_direction = np.zeros( (len(Y), len(X)) )
+    for i in range(len(prediction_magnitude)):
+        row = i % len(Y)
+        col = i // len(Y)
+        Z_magnitude[row, col] = prediction_magnitude[i]
+        # Z_direction[row, col] = prediction_direction[i]
+
+    fig = plt.figure(figsize=(6, 6))
+    plt.contourf(X, Y, Z_magnitude, 20, cmap='coolwarm')
+    plt.colorbar()
+    plt.plot(start[0], start[1], 'ko', markersize = 10)
+    plt.plot(target[0], target[1], 'k*', markersize = 10)
+
+
+    localisation = []
+    X = []
+    Y = []
+    for i in range(21):
+        for j in range(21):
+            X.append(i * 1000/20)
+            Y.append(j* 1000/20)
+            localisation.append( (i* 1000/20, j*1000/20) )
+
+    prediction_magnitude = Wind._get_magnitude(localisation)
+    prediction_direction = Wind._get_direction(localisation)
+    U = []
+    V = []
+    for i in range(len(prediction_magnitude)):
+        U.append(prediction_magnitude[i]/20 * np.cos(prediction_direction[i] * np.pi /180))
+        V.append(prediction_magnitude[i]/20 * np.sin(prediction_direction[i] * np.pi /180))
+
+
+    plt.quiver(X, Y, U, V)
+    return fig
 
 
 def get_discrete_maps(wind_info):
@@ -46,3 +100,20 @@ def get_straight_angle(start, target):
         straight_angle = 0 if start[0] < target[0] else 180
 
     return straight_angle
+
+
+'''
+X = np.linspace(0, 1000, 1000)
+Y = np.linspace(0, 1000, 1000)
+Z = np.zeros( (len(Y), len(X)) )
+for i in range(len(X)):
+    for j in range(len(Y)):
+        if( ( (X[i]-target[0])**2 + (Y[j] - target[1])**2 > radius**2)):
+            Z[j][i] = (-  ( np.sqrt( (np.sqrt((X[i] - target[0])**2 + (Y[j] - target[1])**2) - radius) ))/(np.sqrt(np.sqrt(2)*1000)) )
+        else:
+            Z[j][i] = 1
+
+plt.contourf(X, Y, Z, 40, cmap='RdGy')
+plt.colorbar()
+plt.show()
+'''
