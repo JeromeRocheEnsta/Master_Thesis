@@ -224,3 +224,27 @@ class WindEnv_gym(gym.Env):
             return reward_2(energy(self.propulsion_velocity, self.mu), self._target())
         else:
             raise Exception("This reward number is not available yet")
+
+    def plot_trajectory(self, reward_ep):
+        fig, axs = plt.subplots(nrows = 2, ncols = 2)
+        fig.set_size_inches(10, 7)
+
+        axs[0,0].plot(self.trajectory_x, self.trajectory_y, '-')
+        a_circle = plt.Circle(self.target, radius = self.target_radius)
+        axs[0,0].add_artist(a_circle)
+        axs[0,0].set_title('steps : {} ; reward : {}'.format(len(self.time) - 1,round(reward_ep), 2))
+        axs[0,0].set_aspect('equal', 'box')
+        axs[0,0].set_xlim([0, self.length])
+        axs[0,0].set_ylim([0, self.heigth])
+
+
+        axs[0,1].plot(self.time, self.energy)
+        axs[0,1].set_title('Energy consumed ({}) v.s. time ({}s)'.format(round(self.energy[-1]), round(self.time[-1], 1)) )
+
+        axs[1,0].scatter(self.time, self.trajectory_ha)
+        axs[1,0].set_title('Heading angle versus time')
+
+        axs[1,1].plot(self.time[1:], self.trajectory_action)
+        axs[1,1].set_title('Action versus time')
+
+        return(fig, axs)

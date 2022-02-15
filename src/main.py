@@ -2,6 +2,7 @@ import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from utils import *
 from env.wind_env import *
 from env.wind.wind_map import *
 from stable_baselines3.common.env_checker import check_env
@@ -15,10 +16,10 @@ gym.logger.set_level(40)
 ###############
 #Output directory
 ###############
-plot = False
+save = False
 
 if len(sys.argv) > 1:
-    plot = True
+    save = True
     os.mkdir(sys.argv[1])
 
 ###############
@@ -114,7 +115,7 @@ for i in range(len(prediction_magnitude)):
 
 plt.quiver(X, Y, U, V)
 
-if plot:
+if save:
     plt.savefig(sys.argv[1]+'/wind_field.png')
 
 
@@ -140,57 +141,20 @@ plt.show()
 ### Reference trajectory
 ######################
 
-angle = np.arctan(abs(start[1] - target[1])/abs(start[0] - target[0])) * 180 / np.pi
-## Case 1
-if(start[0] < target[0] and start[1] > target[1]):
-    straight_angle = 360 - angle
-## Case 2
-elif(start[0] > target[0] and start[1] > target[1]):
-    straight_angle = 180 + angle
-## Case 3
-elif(start[0] > target[0] and start[1] < target[1]):
-    straight_angle = 180 - angle
-## Case 4
-elif(start[0] < target[0] and start[1] < target[1]):
-    straight_angle = angle
-## Case 5
-elif(start[0] == target[0]):
-    straight_angle = 90 if start[1] < target[1] else 270
-elif(start[1] == target[1]):
-    straight_angle = 0 if start[0] < target[0] else 180
+straight_angle = get_straight_angle(start, target)
     
 
-env_ref = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle)
+env_ref = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle)
 env_ref.reset()
 reward_ref = 0
 while env_ref._target() == False:
     obs, reward, done, info = env_ref.step(0)
     reward_ref += reward
 
+##Plot trajectory
+fig, axs = env_ref.plot_trajectory(reward_ref)
 
-## Plot of the reference trajectory
-fig, axs = plt.subplots(nrows = 2, ncols = 2)
-fig.set_size_inches(10, 7)
-
-axs[0,0].plot(env_ref.trajectory_x, env_ref.trajectory_y, '-')
-a_circle = plt.Circle(target, radius = radius)
-axs[0,0].add_artist(a_circle)
-axs[0,0].set_title('steps : {} ; reward : {}'.format(len(env_ref.time) - 1,round(reward_ref), 2))
-axs[0,0].set_aspect('equal', 'box')
-axs[0,0].set_xlim([0, 1000])
-axs[0,0].set_ylim([0, 1000])
-
-
-axs[0,1].plot(env_ref.time, env_ref.energy)
-axs[0,1].set_title('Energy consumed ({}) v.s. time ({}s)'.format(round(env_ref.energy[-1]), round(env_ref.time[-1], 1)) )
-
-axs[1,0].scatter(env_ref.time, env_ref.trajectory_ha)
-axs[1,0].set_title('Heading angle versus time')
-
-axs[1,1].plot(env_ref.time[1:], env_ref.trajectory_action)
-axs[1,1].set_title('Action versus time')
-
-if plot:
+if save:
     plt.savefig(sys.argv[1]+'/ref_path.png')
 
 plt.show()
@@ -205,7 +169,7 @@ del env_ref
 ### Test the environment
 ######################
 
-env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
+env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
 # It will check your custom environment and output additional warnings if needed
 check_env(env)
 
@@ -262,28 +226,9 @@ for _ in range(1):
     if done:
         done_count += 1
 
-    fig, axs = plt.subplots(2, 2)
-    fig.set_size_inches(10, 7)
-    fig.suptitle('Trajectory: Deterministic (0 / 10); Propulsion: {}'.format(env.propulsion))
+    fig, axs = env.plot_trajectory(ep_reward)
 
-    axs[0,0].plot(env.trajectory_x, env.trajectory_y, '-')
-    a_circle = plt.Circle(target, radius = radius)
-    axs[0,0].add_artist(a_circle)
-    axs[0,0].set_title('steps : {} ; reward : {}'.format(len(env.time) - 1,round(ep_reward),2))
-    axs[0,0].set_aspect('equal', 'box')
-    axs[0,0].set_xlim([0, 1000])
-    axs[0,0].set_ylim([0, 1000])
-    
-    axs[0,1].plot(env.time, env.energy)
-    axs[0,1].set_title('Energy consumed ({}) v.s. time ({}s)'.format(round(env.energy[-1]), round(env.time[-1]),1))
-    
-    axs[1,0].scatter(env.time, env.trajectory_ha)
-    axs[1,0].set_title('Heading angle versus time')
-
-    axs[1,1].plot(env.time[1:], env.trajectory_action)
-    axs[1,1].set_title('Action versus time')
-
-    if plot:
+    if save:
         plt.savefig(sys.argv[1]+'/deterministic_path.png')
     
     plt.show()
@@ -303,26 +248,7 @@ for episode in range(10):
         done_count += 1
     
 
-    fig, axs = plt.subplots(2, 2)
-    fig.set_size_inches(10, 7)
-    fig.suptitle('Trajectory: Stochastic ({} / 10) ; Propulsion: {}'.format( episode + 1 , env.propulsion))
-
-    axs[0,0].plot(env.trajectory_x, env.trajectory_y, '-')
-    a_circle = plt.Circle(target, radius = radius)
-    axs[0,0].add_artist(a_circle)
-    axs[0,0].set_title('steps : {} ; reward : {}'.format(len(env.time) - 1,round(ep_reward),2))
-    axs[0,0].set_aspect('equal', 'box')
-    axs[0,0].set_xlim([0, 1000])
-    axs[0,0].set_ylim([0, 1000])
-    
-    axs[0,1].plot(env.time, env.energy)
-    axs[0,1].set_title('Energy consumed ({}) v.s. time ({}s)'.format(round(env.energy[-1]), round(env.time[-1]),1))
-    
-    axs[1,0].scatter(env.time, env.trajectory_ha)
-    axs[1,0].set_title('Heading angle versus time')
-
-    axs[1,1].plot(env.time[1:], env.trajectory_action)
-    axs[1,1].set_title('Action versus time')
+    fig, axs = env.plot_trajectory(ep_reward)
     
     if plot:
         plt.savefig(sys.argv[1]+'/stochastic_path_'+str(episode+1)+'.png')
