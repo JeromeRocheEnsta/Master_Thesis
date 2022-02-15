@@ -18,9 +18,12 @@ if __name__ == "__main__":
     gamma = [0.9, 0.99, 1]
     train_timesteps = 150000
 
-    name = 'png_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
-
-
-    train(save = True, dir_name = name, propulsion = propulsion, ha = ha, alpha = alpha, reward_number = reward_number,
-        start = start, target = target, initial_angle = initial_angle, radius = radius, dt = dt, gamma = gamma, train_timesteps = 150000, seed = seed)
+    for reward_number in reward_number:
+        for ha in ha:
+            for alpha in alpha:
+                for dt in dt:
+                    for gamma in gamma:
+                        name = 'png_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
+                        train(save = True, dir_name = name, propulsion = propulsion, ha = ha, alpha = alpha, reward_number = reward_number,
+                        start = start, target = target, initial_angle = initial_angle, radius = radius, dt = dt, gamma = gamma, train_timesteps = 150000, seed = seed)
 
