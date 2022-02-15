@@ -13,6 +13,21 @@ from typing import Callable
 gym.logger.set_level(40)
 
 
+######################
+### Control interface
+######################
+propulsion = 'variable'
+ha = 'propulsion'
+alpha = 15
+reward_number = 1
+start = (100, 900)
+target = (800, 200)
+initial_angle = 0
+radius = 20
+dt = 1.8
+
+gamma = 0.99
+
 ###############
 #Output directory
 ###############
@@ -29,21 +44,6 @@ if len(sys.argv) > 1:
 discrete_maps = get_discrete_maps(wind_info_2)
 
 A = WindMap(discrete_maps)
-
-######################
-### Control interface
-######################
-propulsion = 'variable'
-ha = 'propulsion'
-alpha = 15
-reward_number = 1
-start = (100, 900)
-target = (800, 200)
-initial_angle = 0
-radius = 20
-dt = 1.8
-
-gamma = 0.99
 
 
 ######################
@@ -231,7 +231,7 @@ for episode in range(10):
 
     fig, axs = env.plot_trajectory(ep_reward)
     
-    if plot:
+    if save:
         plt.savefig(sys.argv[1]+'/stochastic_path_'+str(episode+1)+'.png')
 
     plt.show()
