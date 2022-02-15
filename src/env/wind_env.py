@@ -222,7 +222,7 @@ class WindEnv_gym(gym.Env):
         if (self.reward_number == 1):
             return reward_1(self.state, self.target, self.length, self.heigth, self.target_radius, self._target())
         elif(self.reward_number == 2):
-            return reward_2(energy(self.propulsion_velocity, self.mu), self._target())
+            return reward_2(energy(self.propulsion_velocity, self.mu), self.state, self.target, self.length, self.heigth, self.target_radius, self._target())
         else:
             raise Exception("This reward number is not available yet")
 

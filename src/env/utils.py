@@ -10,13 +10,13 @@ def reward_1(state, target, length, heigth, target_radius, is_target):
         return(-  ( (np.sqrt( np.sqrt((state[1]  - target[0])**2 + (state[2] - target[1])**2) - target_radius))/(np.sqrt( np.sqrt(length**2 + heigth**2 ))) ))
 
 
-def reward_2(energy, is_target):
+def reward_2(energy, state, target, length, heigth, target_radius, is_target):
     if is_target:
-        return 100
+        return 10
     else:
-        return(-energy)
+        return(-energy + reward_1(state, target, length, heigth, target_radius, is_target))
 
-def energy(v_prop, mu,k = 4, n = 3):
+def energy(v_prop, mu,k = 1, n = 3):
     return(k * ( (v_prop / mu) ** n) )
 
 def score(E, t, Es, ts, alpha = 0.5):
