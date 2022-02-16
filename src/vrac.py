@@ -6,5 +6,8 @@ Y = []
 for x in X:
     Y.append((x/20)**3)
 
-plt.plot(X, Y)
-plt.show()
+#plt.plot(X, Y)
+#plt.show()
+
+file1 = open("MyFile.txt","w")
+file1.write("coucou")

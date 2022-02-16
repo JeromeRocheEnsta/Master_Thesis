@@ -41,12 +41,16 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
 def train(save = False, dir_name = None, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
 start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99, train_timesteps = 150000, seed = 1):
+    
+    
     # MKDIR to stock figures output
     if save:
         if dir_name == None:
-            os.mkdir('noname')
+            os.mkdir('png_noname')
         else:
             os.mkdir(dir_name)
+            file1 = open(dir_name+'/info.txt', 'w')
+        
 
     # Crete WindMap Object (Wind Field modelized with a GP)
     discrete_maps = get_discrete_maps(wind_info_2)
@@ -71,6 +75,8 @@ start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.
     if save:
         plt.savefig(dir_name+'/ref_path.png')
     plt.close(fig)
+    file1.write('Reference Path info: \n')
+    file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(reward_ref, len(env_ref.time) - 1, round(env_ref.time[-1], 1), round(env_ref.energy[-1])))
     del env_ref
 
     # train agent
@@ -96,6 +102,8 @@ start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.
         if save:
             plt.savefig(dir_name+'/deterministic_path.png')
         plt.close(fig)
+        file1.write('Deterministic Path info: \n')
+        file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(ep_reward, len(env.time) - 1, round(env.time[-1], 1), round(env.energy[-1])))
 
 
     # Stochastic Paths
@@ -115,9 +123,12 @@ start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.
         if save:
             plt.savefig(dir_name+'/stochastic_path_'+str(episode+1)+'.png')
         plt.close(fig)
+        file1.write('Stochastic Path ({}/10) info: \n'.format(episode + 1))
+        file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(ep_reward, len(env.time) - 1, round(env.time[-1], 1), round(env.energy[-1])))
 
     del model
     del env
+    file1.close()
 
         
 
