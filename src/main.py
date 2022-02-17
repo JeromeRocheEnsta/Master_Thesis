@@ -12,19 +12,24 @@ if __name__ == "__main__":
     propulsion = 'variable'
     
     
-    ha = ['propulsion', 'next_state']
-    alpha = [10, 15, 20, 40, 50]
-    reward_number = [1, 2]
-    dt = [1, 1.8, 2, 3, 4]
-    gamma = [0.9, 0.99, 1]
+    list_ha = ['propulsion', 'next_state']
+    list_alpha = [10, 15, 40]
+    list_reward_number = [1, 2]
+    list_dt = [1.8, 4]
+    list_gamma = [0.9, 0.99, 1]
     train_timesteps = 150000
     
 
-    for reward_number in reward_number:
-        for ha in ha:
-            for alpha in alpha:
-                for dt in dt:
-                    for gamma in gamma:
+    for i in range(len(list_reward_number)):
+        for j in range(len(list_ha)):
+            for k in range(len(list_alpha)):
+                for l in range(len(list_dt)):
+                    for m in range(len(list_gamma)):
+                        reward_number =list_reward_number[i]
+                        ha = list_ha[j]
+                        alpha = list_alpha[k]
+                        dt = list_dt[l]
+                        gamma = list_gamma[m]
                         name = 'png_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         train(save = True, dir_name = name, propulsion = propulsion, ha = ha, alpha = alpha, reward_number = reward_number,
                         start = start, target = target, initial_angle = initial_angle, radius = radius, dt = dt, gamma = gamma, train_timesteps = train_timesteps, seed = seed)
