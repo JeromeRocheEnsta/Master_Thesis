@@ -101,6 +101,34 @@ def get_straight_angle(start, target):
 
     return straight_angle
 
+def plot_monitoring(file: str, log_dir = None):
+    file = open(file, 'r')
+    timesteps = []
+    expected_rewards = []
+    expected_lengths = []
+    expected_energies = []
+    for line in file:
+        values = line.split()
+        timesteps.append(int(values[0]))
+        expected_rewards.append(float(values[1]))
+        expected_lengths.append(float(values[2]))
+        expected_energies.append(float(values[3]))
+
+    plt.plot(timesteps, expected_rewards, '-')
+    plt.xlabel('Timesteps')
+    plt.ylabel('Expected Return')
+    plt.show()
+    plt.plot(timesteps, expected_lengths, '-')
+    plt.xlabel('Timesteps')
+    plt.ylabel('Expected Length')
+    plt.show()
+    plt.plot(timesteps, expected_energies, '-')
+    plt.xlabel('Timesteps')
+    plt.ylabel('Expected Energy')
+    plt.show()
+
+
+        
 
 '''
 X = np.linspace(0, 1000, 1000)
