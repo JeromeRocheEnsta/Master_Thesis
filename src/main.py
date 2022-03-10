@@ -12,12 +12,12 @@ if __name__ == "__main__":
     propulsion = 'variable'
     
     
-    list_ha = ['propulsion', 'next_state']
-    list_alpha = [10, 15, 40]
-    list_reward_number = [1, 2]
-    list_dt = [1.8, 4]
-    list_gamma = [0.9, 0.99, 1]
-    train_timesteps = 150000
+    list_ha = ['propulsion']
+    list_alpha = [10]
+    list_reward_number = [1]
+    list_dt = [4]
+    list_gamma = [0.9]
+    train_timesteps = 100000
     
 
     for i in range(len(list_reward_number)):

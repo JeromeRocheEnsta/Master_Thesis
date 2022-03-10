@@ -82,7 +82,7 @@ start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.
     # train agent
     env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
     check_env(env)
-    model = PPO("MlpPolicy", env, verbose=1, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
+    model = PPO("MlpPolicy", env, verbose=1, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, tensorboard_log = dir_name)
     model.learn(total_timesteps= train_timesteps)
 
     # Deterministic Path
