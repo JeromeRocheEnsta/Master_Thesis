@@ -40,17 +40,15 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
     return func
 
 
-def train(save = False, dir_name = None, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
+def train(save = False, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
 start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99, train_timesteps = 150000, seed = 1, eval_freq = 1000):
-    
+    print("Execution de train avec seed = {}".format(seed))
     
     # MKDIR to stock figures output
     if save:
-        if dir_name == None:
-            os.mkdir('png_noname')
-        else:
-            os.mkdir(dir_name)
-            file1 = open(dir_name+'/info.txt', 'w')
+        dir_name = 'seed_'+str(seed)
+        os.mkdir(dir_name)
+        file1 = open(dir_name+'/info.txt', 'w')
         
 
     # Crete WindMap Object (Wind Field modelized with a GP)
@@ -84,7 +82,7 @@ start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.
     env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
     check_env(env)
     callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
-    model = PPO("MlpPolicy", env, verbose=1, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
+    model = PPO("MlpPolicy", env, verbose=0, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
     model.learn(total_timesteps= train_timesteps, callback = callback)
 
     # Deterministic Path
