@@ -6,7 +6,7 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    seeds = [1, 2]
+    seeds = [1]
     start = (100, 900)
     target = (800, 200)
     initial_angle = 0
