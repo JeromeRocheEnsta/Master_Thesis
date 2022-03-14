@@ -115,37 +115,43 @@ def get_data(seeds):
         ci_energy = []
     timesteps = []
 
-    for seed in seeds:
-        exec('file'+str(seed)+'=open(\'seed_'+str(seed)+'/monitoring.txt\', \'r\') ')
+    file_timestep = open('seed_1/monitoring.txt', 'r')
+    ts= 0
+    for _ in file_timestep:
+        ts+=1
+    file_timestep.close()
 
-    info = True
-    while info:
+
+    for seed in seeds:
+        exec('file'+str(seed)+'=open("seed_'+str(seed)+'/monitoring.txt", "r")')
+
+    
+    for _ in range(ts):
         count = 1
         rewards =[]
         lengths = []
         energies = []
         for seed in seeds:
-            line = exec('file'+str(seed)+'.readline()')
-            print(line)
-            if not line:
-                info = False
-                break
-            line = line.split()
-            if count == 1:
-                timesteps.append(int(line[0]))
-            rewards.append(line[1])
-            lengths.append(line[2])
-            energies.append(line[3])
+            print(seed)
+            exec('line = file'+str(seed)+'.readline()')
+            exec('line = line.split()')
+            
+            if seed == 1:
+                exec('print(line)')
+                exec('timesteps.append(int(line[0]))')
+            exec('rewards.append(int(line[1]))')
+            exec('lengths.append(int(line[2]))')
+            exec('energies.append(int(line[3]))')
             count += 1
-        if info:
-            mean_reward.append(np.mean(rewards))
-            mean_length.append(np.mean(lengths))
-            mean_energy.append(np.mean(energies))
-            if (n > 1) :
-                t = st.t.ppf(0.975, n-1)
-                ci_reward.append(t*np.sqrt(np.var(rewards)/n))
-                ci_length.append(t*np.sqrt(np.var(lengths)/n))
-                ci_energy.append(t*np.sqrt(np.var(energies)/n))
+
+        mean_reward.append(np.mean(rewards))
+        mean_length.append(np.mean(lengths))
+        mean_energy.append(np.mean(energies))
+        if (n > 1) :
+            t = st.t.ppf(0.975, n-1)
+            ci_reward.append(t*np.sqrt(np.var(rewards)/n))
+            ci_length.append(t*np.sqrt(np.var(lengths)/n))
+            ci_energy.append(t*np.sqrt(np.var(energies)/n))
 
     for seed in seeds:
         exec('file'+str(seed)+'.close()')

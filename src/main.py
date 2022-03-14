@@ -20,7 +20,7 @@ if __name__ == "__main__":
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 150000
+    train_timesteps = 10000
     
 
     for i in range(len(list_reward_number)):
