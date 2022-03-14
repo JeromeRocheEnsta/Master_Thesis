@@ -126,6 +126,7 @@ def get_data(seeds):
         energies = []
         for seed in seeds:
             exec('line = file'+str(seed)+'.readline()')
+            print(line)
             if not line:
                 info = False
                 break
