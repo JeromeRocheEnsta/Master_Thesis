@@ -125,7 +125,7 @@ def get_data(seeds):
         lengths = []
         energies = []
         for seed in seeds:
-            exec('line = file'+str(seed)+'.readline()')
+            line = exec('file'+str(seed)+'.readline()')
             print(line)
             if not line:
                 info = False
@@ -145,6 +145,9 @@ def get_data(seeds):
             ci_reward.append(t*np.sqrt(np.var(rewards)/n))
             ci_length.append(t*np.sqrt(np.var(lengths)/n))
             ci_energy.append(t*np.sqrt(np.var(energies)/n))
+
+    for seed in seeds:
+        exec('file'+str(seed)+'.close()')
     
     if(n > 1):
         return (timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy)
