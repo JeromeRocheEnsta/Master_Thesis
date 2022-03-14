@@ -116,7 +116,7 @@ def get_data(seeds):
     timesteps = []
 
     for seed in seeds:
-        exec('file'+seed+'=open(seed_'+str(seed)+'/monitoring.txt, \'r\') ')
+        exec('file'+str(seed)+'=open(seed_'+str(seed)+'/monitoring.txt, \'r\') ')
 
     info = True
     while info:
