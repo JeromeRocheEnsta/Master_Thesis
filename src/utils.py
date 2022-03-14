@@ -1,7 +1,9 @@
+from xmlrpc.client import Boolean
 import numpy as np
 import matplotlib.pyplot as plt
 plt.ioff()
 from env.wind.wind_map import WindMap
+import scipy.stats as st
 
 
 
@@ -100,6 +102,57 @@ def get_straight_angle(start, target):
         straight_angle = 0 if start[0] < target[0] else 180
 
     return straight_angle
+
+def get_data(seeds):
+    ## Need the current path to be in the directory containing the seeds directory
+    n = len(seeds)
+    mean_reward = []
+    mean_length = []
+    mean_energy = []
+    if (n > 1):
+        ci_reward = []
+        ci_length = []
+        ci_energy = []
+    timesteps = []
+
+    for seed in seeds:
+        exec('file'+seed+'=open(seed_'+seed+'/monitoring.txt, \'r\') ')
+
+    info = True
+    while info:
+        count = 1
+        rewards =[]
+        lengths = []
+        energies = []
+        for seed in seeds:
+            exec('line = file'+seed+'.readline()')
+            if not line:
+                info = False
+                break
+            line = line.split()
+            if count == 1:
+                timesteps.append(int(line[0]))
+            rewards.append(line[1])
+            lengths.append(line[2])
+            energies.append(line[3])
+            count += 1
+        mean_reward.append(np.mean(rewards))
+        mean_length.append(np.mean(lengths))
+        mean_energy.append(np.mean(energies))
+        if (n > 1) :
+            t = st.t.ppf(0.975, n-1)
+            ci_reward.append(t*np.sqrt(np.var(rewards)/n))
+            ci_length.append(t*np.sqrt(np.var(lengths)/n))
+            ci_energy.append(t*np.sqrt(np.var(energies)/n))
+    
+    if(n > 1):
+        return (timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy)
+    else:
+        return(timesteps, mean_reward, mean_length, mean_energy)
+    
+
+        
+
 
 def plot_monitoring(file: str, log_dir = None):
     file = open(file, 'r')
