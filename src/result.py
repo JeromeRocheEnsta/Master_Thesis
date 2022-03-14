@@ -10,4 +10,4 @@ if __name__ == "__main__":
     plt.plot(timesteps, mean_reward)
     plt.xlabel('Timesteps')
     plt.ylabel('Average Reward')
-    plt.show()
+    plt.savefig('test.png')
