@@ -6,7 +6,7 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    seeds = [1, 2]
+    seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     start = (100, 900)
     target = (800, 200)
     initial_angle = 0
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 10000
+    train_timesteps = 150000
     
 
     for i in range(len(list_reward_number)):
