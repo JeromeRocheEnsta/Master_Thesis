@@ -8,6 +8,6 @@ if __name__ == "__main__":
     timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy = get_data(seeds)
 
     plt.plot(timesteps, mean_reward)
-    plt.xlab('Timesteps')
-    plt.ylab('Average Reward')
+    plt.xlabel('Timesteps')
+    plt.ylabel('Average Reward')
     plt.show()
