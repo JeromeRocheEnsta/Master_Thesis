@@ -116,7 +116,7 @@ def get_data(seeds):
     timesteps = []
 
     for seed in seeds:
-        exec('file'+seed+'=open(seed_'+seed+'/monitoring.txt, \'r\') ')
+        exec('file'+seed+'=open(seed_'+str(seed)+'/monitoring.txt, \'r\') ')
 
     info = True
     while info:
@@ -125,7 +125,7 @@ def get_data(seeds):
         lengths = []
         energies = []
         for seed in seeds:
-            exec('line = file'+seed+'.readline()')
+            exec('line = file'+str(seed)+'.readline()')
             if not line:
                 info = False
                 break
