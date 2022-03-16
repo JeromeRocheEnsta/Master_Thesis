@@ -36,8 +36,8 @@ if __name__ == "__main__":
     train_timesteps = 500000
     method = 'SAC'
 
-
-    os.mkdir('Exp_network', exist_ok = True)
+    if not os.path.exists('Exp_network'):
+        os.mkdir('Exp_network')
     os.chdir('Exp_network')
     
 
