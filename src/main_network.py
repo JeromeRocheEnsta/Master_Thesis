@@ -14,6 +14,9 @@ Activation  = {
     'tanh' : th.nn.Tanh,
     'leakyrelu' : th.nn.LeakyReLU
 }
+Activation  = {
+    'relu' : th.nn.ReLU
+}
 
 if __name__ == "__main__":
     #########################
@@ -25,7 +28,7 @@ if __name__ == "__main__":
     initial_angle = 0
     radius = 20
     propulsion = 'variable'
-    eval_freq = 1000
+    eval_freq = 5000
     
     
     list_ha = ['propulsion']
@@ -34,7 +37,7 @@ if __name__ == "__main__":
     list_dt = [4]
     list_gamma = [0.9]
     train_timesteps = 500000
-    method = 'SAC'
+    method = 'PPO'
 
     if not os.path.exists('Exp_network'):
         os.mkdir('Exp_network')
@@ -53,7 +56,8 @@ if __name__ == "__main__":
                         gamma = list_gamma[m]
                         name = method+'_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         
-                        os.mkdir(name)
+                        if not os.path.exists(name):
+                            os.mkdir(name)
                         os.chdir(name)
 
                         for cle, valeur in Activation.items():

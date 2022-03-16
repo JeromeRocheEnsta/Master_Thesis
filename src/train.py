@@ -43,7 +43,7 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
 def train(save = False, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
 start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99,
-train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = 'PPO'):
+train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = None):
     print("Execution de train avec seed = {}".format(seed))
     
     # MKDIR to stock figures output
@@ -85,8 +85,10 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     check_env(env)
     callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
     if(method == 'PPO'):
+        print('PPO')
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
     elif(method == 'SAC'):
+        print('SAC')
         model = SAC("MlpPolicy", env, verbose = 0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
     model.learn(total_timesteps= train_timesteps, callback = callback)
 

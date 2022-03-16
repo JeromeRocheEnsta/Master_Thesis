@@ -19,5 +19,3 @@ def reward_2(energy, state, target, length, heigth, target_radius, is_target):
 def energy(v_prop, mu,k = 1, n = 3):
     return(k * ( (v_prop / mu) ** n) )
 
-def score(E, t, Es, ts, alpha = 0.5):
-    return(alpha * E / Es + (1 - alpha) * t / ts)

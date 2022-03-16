@@ -59,8 +59,8 @@ class WindEnv_gym(gym.Env):
             
         # Define action and observation space
         # They must be gym.spaces objects
-        self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float64)
-        self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float64), high = np.array([360., 1000., 1000.], dtype = np.float64), shape = (3,), dtype = np.float64)
+        self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float)
+        self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float), high = np.array([360., 1000., 1000.], dtype = np.float), shape = (3,), dtype = np.float)
 
     def _target(self):
         dist = (self.state[1] - self.target[0])**2 + (self.state[2] - self.target[1])**2
@@ -82,8 +82,8 @@ class WindEnv_gym(gym.Env):
 
         if(counter == 0):
             # zero reflexion
-            self.state[1] = np.float64(next_x)
-            self.state[2] = np.float64(next_y)
+            self.state[1] = np.float(next_x)
+            self.state[2] = np.float(next_y)
         elif(counter == 1):
             # only one reflexion
             if(next_x > 1000):
@@ -145,7 +145,7 @@ class WindEnv_gym(gym.Env):
                     self.state[0] = self.state[0] - 2 * ( self.state[0] - 90 ) # second deviation
         # Change the heading angle 
         # change the previous state position, next_x, next_y and find if after the correction the uav is still outside or not
-        obs = np.zeros((3,), dtype = np.float64)
+        obs = np.zeros((3,), dtype = np.float)
         obs[0] = self.state[0]
         obs[1] = self.state[1]
         obs[2] = self.state[2]
@@ -160,9 +160,9 @@ class WindEnv_gym(gym.Env):
         self.trajectory_action = []
         self.energy = [0]
         self.time = [0]
-        self.state = np.array([self.initial_angle, self.start[0], self.start[1]], dtype = np.float64)
+        self.state = np.array([self.initial_angle, self.start[0], self.start[1]], dtype = np.float)
 
-        obs = np.zeros((3,), dtype = np.float64)
+        obs = np.zeros((3,), dtype = np.float)
         obs[0] = self.state[0]
         obs[1] = self.state[1]
         obs[2] = self.state[2]
@@ -202,7 +202,7 @@ class WindEnv_gym(gym.Env):
 
             
         
-        obs = self._next_observation(np.float64(next_x), np.float64(next_y) )          
+        obs = self._next_observation(np.float(next_x), np.float(next_y) )          
 
         self.trajectory_ha.append(self.state[0])
         self.trajectory_x.append(self.state[1])
