@@ -14,9 +14,6 @@ Activation  = {
     'tanh' : th.nn.Tanh,
     'leakyrelu' : th.nn.LeakyReLU
 }
-Activation  = {
-    'relu' : th.nn.ReLU
-}
 
 if __name__ == "__main__":
     #########################
@@ -36,7 +33,7 @@ if __name__ == "__main__":
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 500000
+    train_timesteps = 150000
     method = 'PPO'
 
     if not os.path.exists('Exp_network'):

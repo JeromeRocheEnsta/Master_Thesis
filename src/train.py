@@ -85,12 +85,13 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     check_env(env)
     callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
     if(method == 'PPO'):
-        print('PPO')
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
     elif(method == 'SAC'):
         print('SAC')
         model = SAC("MlpPolicy", env, verbose = 0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
+    print('Begin training with seed {}'.format(seed))
     model.learn(total_timesteps= train_timesteps, callback = callback)
+    print('End training with seed {}'.format(seed))
 
     # Deterministic Path
     ep_reward = 0
