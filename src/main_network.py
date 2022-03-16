@@ -34,12 +34,10 @@ if __name__ == "__main__":
     list_dt = [4]
     list_gamma = [0.9]
     train_timesteps = 500000
-
-    Activation_id = [th.nn.ReLU, th.nn.Tanh, th.nn.LeakyReLU]
-    Network_id = [1, 2, 3]
+    method = 'SAC'
 
 
-    os.mkdir('Exp_network')
+    os.mkdir('Exp_network', exist_ok = True)
     os.chdir('Exp_network')
     
 
@@ -53,7 +51,7 @@ if __name__ == "__main__":
                         alpha = list_alpha[k]
                         dt = list_dt[l]
                         gamma = list_gamma[m]
-                        name = 'png_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
+                        name = method+'_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         
                         os.mkdir(name)
                         os.chdir(name)
@@ -70,7 +68,7 @@ if __name__ == "__main__":
 
                                 for seed in seeds:
                                     print(seed)
-                                    exec("process"+str(seed)+"= multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs])")
+                                    exec("process"+str(seed)+"= multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method])")
                                 
                                 for seed in seeds:
                                     exec("process"+str(seed)+".start()")
