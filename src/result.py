@@ -1,7 +1,6 @@
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-from utils import get_data
 import scipy.stats as st
 
 
@@ -79,5 +78,34 @@ if __name__ == "__main__":
     ax.fill_between(timesteps, down, up, color='b', alpha=.1)
     ax.set_xlabel('Timesteps')
     ax.set_ylabel('Average Reward')
-    plt.savefig('test.png')
+    plt.savefig('reward.png')
+    plt.close(fig)
+
+
+    up = []
+    down = []
+    for i in range(len(timesteps)):
+        up.append(mean_length[i] + ci_length[i])
+        down.append(mean_length[i] - ci_length[i])
+
+    fig, ax = plt.subplots()
+    ax.plot(timesteps,mean_length, color = 'b')
+    ax.fill_between(timesteps, down, up, color='b', alpha=.1)
+    ax.set_xlabel('Timesteps')
+    ax.set_ylabel('Average Length')
+    plt.savefig('length.png')
+    plt.close(fig)
+
+    up = []
+    down = []
+    for i in range(len(timesteps)):
+        up.append(mean_energy[i] + ci_energy[i])
+        down.append(mean_energy[i] - ci_energy[i])
+
+    fig, ax = plt.subplots()
+    ax.plot(timesteps,mean_energy, color = 'b')
+    ax.fill_between(timesteps, down, up, color='b', alpha=.1)
+    ax.set_xlabel('Timesteps')
+    ax.set_ylabel('Average Energy')
+    plt.savefig('energy.png')
     plt.close(fig)
