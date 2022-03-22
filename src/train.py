@@ -43,7 +43,7 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
 def train(save = False, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
 start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99,
-train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = None):
+train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = 'PPO'):
     print("Execution de train avec seed = {}".format(seed))
     
     # MKDIR to stock figures output
@@ -78,7 +78,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     plt.close(fig)
     file1.write('Reference Path info: \n')
     file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(reward_ref, len(env_ref.time) - 1, round(env_ref.time[-1], 1), round(env_ref.energy[-1])))
-    del env_ref
+    
 
     # train agent
     env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
@@ -127,7 +127,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
                 break
         
 
-        fig, axs = env.plot_trajectory(ep_reward)
+        fig, axs = env.plot_trajectory(ep_reward, ref_trajectory_x = env_ref.trajectory_x, ref_trajectory_y = env_ref.trajectory_y, ref_energy= env_ref.energy, ref_time = env_ref.time)
         if save:
             plt.savefig(dir_name+'/stochastic_path_'+str(episode+1)+'.png')
         plt.close(fig)
@@ -136,6 +136,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
 
     del model
     del env
+    del env_ref
     file1.close()
 
     plot_monitoring(dir_name+'/monitoring.txt')
