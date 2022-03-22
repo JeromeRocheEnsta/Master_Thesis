@@ -16,6 +16,17 @@ def get_data(seeds):
         ci_energy = []
     timesteps = []
 
+    ## Extract ref paths info
+
+    file_ref_path = open('seed_1/info.txt', 'r')
+    file_ref_path.readline()
+    ref_line = file_ref_path.readline()
+    ref_line = ref_line.split()
+    ref_reward = float(ref_line[3][:-1])
+    ref_length = float(ref_line[6][:-1])
+    ref_energy = float(ref_line[13])
+    file_ref_path.close()
+
     file_timestep = open('seed_1/monitoring.txt', 'r')
     ts= 0
     for _ in file_timestep:
@@ -58,15 +69,16 @@ def get_data(seeds):
         exec('file'+str(seed)+'.close()')
     
     if(n > 1):
-        return (timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy)
+        return (timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy)
     else:
-        return(timesteps, mean_reward, mean_length, mean_energy)
+        return(timesteps, mean_reward, mean_length, mean_energy, ref_reward, ref_length, ref_energy)
 
 
 if __name__ == "__main__":
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy = get_data(seeds)
-
+    timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds)
+    
+    ### Reward plot
     up = []
     down = []
     for i in range(len(timesteps)):
@@ -76,11 +88,14 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     ax.plot(timesteps,mean_reward, color = 'b')
     ax.fill_between(timesteps, down, up, color='b', alpha=.1)
+    ax.axhline(y=ref_reward, color='r', linestyle='-')
     ax.set_xlabel('Timesteps')
     ax.set_ylabel('Average Reward')
     plt.savefig('reward.png')
     plt.close(fig)
 
+
+    ### Length plot
 
     up = []
     down = []
@@ -91,10 +106,13 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     ax.plot(timesteps,mean_length, color = 'b')
     ax.fill_between(timesteps, down, up, color='b', alpha=.1)
+    ax.axhline(y=ref_length, color='r', linestyle='-')
     ax.set_xlabel('Timesteps')
     ax.set_ylabel('Average Length')
     plt.savefig('length.png')
     plt.close(fig)
+
+    ### Energy plot
 
     up = []
     down = []
@@ -105,6 +123,7 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     ax.plot(timesteps,mean_energy, color = 'b')
     ax.fill_between(timesteps, down, up, color='b', alpha=.1)
+    ax.axhline(y=ref_energy, color='r', linestyle='-')
     ax.set_xlabel('Timesteps')
     ax.set_ylabel('Average Energy')
     plt.savefig('energy.png')
