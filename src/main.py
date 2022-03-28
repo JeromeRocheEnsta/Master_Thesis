@@ -39,20 +39,12 @@ if __name__ == "__main__":
                         os.chdir(name)
                         #Multi Porcessing
 
-                        for seed in seeds:
-                            print(seed)
-                            exec("process"+str(seed)+"= multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq])")
-                        
-                        for seed in seeds:
-                            exec("process"+str(seed)+".start()")
+                        processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq]) for seed in seeds]
 
-                        for seed in seeds:
-                            exec("process"+str(seed)+".join()")
-                        
-                        
-                        #train(save = True, dir_name = name, propulsion = propulsion, ha = ha, alpha = alpha, reward_number = reward_number,
-                        #start = start, target = target, initial_angle = initial_angle, radius = radius, dt = dt, gamma = gamma, train_timesteps = train_timesteps, seed = seed, eval_freq = eval_freq)
-                        
-                        
+                        for process in processes:
+                            process.start()
+                        for process in processes:
+                            process.join()
+
                         os.chdir('../')
 
