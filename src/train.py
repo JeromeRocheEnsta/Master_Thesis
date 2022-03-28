@@ -43,7 +43,7 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
 def train(save = False, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
 start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99,
-train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = 'PPO'):
+train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = 'PPO', scale = 1):
     print("Execution de train avec seed = {}".format(seed))
     
     # MKDIR to stock figures output
@@ -65,7 +65,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
 
     # reference path
     straight_angle = get_straight_angle(start, target)
-    env_ref = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle)
+    env_ref = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, scale = scale)
     env_ref.reset()
     reward_ref = 0
     while env_ref._target() == False:
@@ -81,7 +81,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     
 
     # train agent
-    env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
+    env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, scale = scale)
     check_env(env)
     callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
     if(method == 'PPO'):
@@ -139,7 +139,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     del env_ref
     file1.close()
 
-    plot_monitoring(dir_name+'/monitoring.txt')
+    #plot_monitoring(dir_name+'/monitoring.txt')
 
         
 

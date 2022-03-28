@@ -3,11 +3,11 @@ import numpy as np
 
 
 
-def reward_1(state, target, length, heigth, target_radius, is_target):
+def reward_1(state, target, length, heigth, target_radius, is_target, scale = 1):
     if is_target:
-        return 10
+        return 10 * scale
     else:
-        return(-  ( (np.sqrt( np.sqrt((state[1]  - target[0])**2 + (state[2] - target[1])**2) - target_radius))/(np.sqrt( np.sqrt(length**2 + heigth**2 ))) ))
+        return(- scale * ( (np.sqrt( np.sqrt((state[1]  - target[0])**2 + (state[2] - target[1])**2) - target_radius))/(np.sqrt( np.sqrt(length**2 + heigth**2 ))) ))
 
 
 def reward_2(magnitude, magnitude_max, direction, position, target, is_target, scale = 1):

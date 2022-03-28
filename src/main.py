@@ -12,12 +12,12 @@ if __name__ == "__main__":
     initial_angle = 0
     radius = 20
     propulsion = 'variable'
-    eval_freq = 1000
+    eval_freq = 2000
     
     
     list_ha = ['propulsion']
     list_alpha = [15]
-    list_reward_number = [1]
+    list_reward_number = [2]
     list_dt = [4]
     list_gamma = [0.9]
     train_timesteps = 8000
