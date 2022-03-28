@@ -30,7 +30,7 @@ if __name__ == "__main__":
     
     list_ha = ['propulsion']
     list_alpha = [15]
-    list_reward_number = [1]
+    list_reward_number = [2]
     list_dt = [4]
     list_gamma = [0.9]
     train_timesteps = 150000
