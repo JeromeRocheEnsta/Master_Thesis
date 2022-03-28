@@ -78,8 +78,5 @@ if __name__ == "__main__":
 
                                 os.chdir('../')
                         
-                        #train(save = True, dir_name = name, propulsion = propulsion, ha = ha, alpha = alpha, reward_number = reward_number,
-                        #start = start, target = target, initial_angle = initial_angle, radius = radius, dt = dt, gamma = gamma, train_timesteps = train_timesteps, seed = seed, eval_freq = eval_freq)
-                        
                         
                         os.chdir('../')
