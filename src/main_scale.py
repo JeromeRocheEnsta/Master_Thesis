@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
                                 for seed in seeds:
                                     print(seed)
-                                    exec("process"+str(seed)+"= multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method])")
+                                    exec("process"+str(seed)+"= multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, scale])")
                                 
                                 for seed in seeds:
                                     exec("process"+str(seed)+".start()")
