@@ -106,7 +106,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
             if done:
                 break
 
-        fig, axs = env.plot_trajectory(ep_reward)
+        fig, axs = env.plot_trajectory(ep_reward, ref_trajectory_x = env_ref.trajectory_x, ref_trajectory_y = env_ref.trajectory_y, ref_energy= env_ref.energy, ref_time = env_ref.time)
         if save:
             plt.savefig(dir_name+'/deterministic_path.png')
         plt.close(fig)
