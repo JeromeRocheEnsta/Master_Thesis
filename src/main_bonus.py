@@ -3,18 +3,6 @@ import os
 import multiprocessing
 import torch as th
 
-Network = {
-    1 : [dict(pi = [64,64], vf = [64,64])],
-    2 : [dict(pi = [100,50,25], vf = [100,50,25])],
-    3 : [dict(pi = [400, 300], vf = [400, 300])]
-}
-
-Activation  = {
-    'relu' : th.nn.ReLU,
-    'tanh' : th.nn.Tanh,
-    'leakyrelu' : th.nn.LeakyReLU
-}
-
 if __name__ == "__main__":
     #########################
     ### Control interface ###
@@ -31,7 +19,7 @@ if __name__ == "__main__":
     bonus = [0, 0.1, 0.5, 1]
     list_ha = ['propulsion']
     list_alpha = [15]
-    list_reward_number = [1]
+    list_reward_number = [2]
     list_dt = [4]
     list_gamma = [0.9]
     train_timesteps = 150000
