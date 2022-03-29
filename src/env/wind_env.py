@@ -10,7 +10,7 @@ from env.utils import reward_1, reward_2, energy
 
 
 class WindEnv_gym(gym.Env):
-    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, start = None, target = None, scale = 1):
+    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, start = None, target = None, bonus = 10, scale = 1):
         super(WindEnv_gym, self).__init__()
 
         ### Type of dynamic
@@ -18,6 +18,7 @@ class WindEnv_gym(gym.Env):
         self.propulsion = propulsion
         self.ha = ha
         self.scale = scale #Reward scaling
+        self.bonus = bonus # bonus for reaching the goal
         self.magnitude_max = 20
 
 
@@ -223,11 +224,11 @@ class WindEnv_gym(gym.Env):
     
     def reward(self):
         if (self.reward_number == 1):
-            return reward_1(self.state, self.target, self.length, self.heigth, self.target_radius, self._target(), self.scale)
+            return reward_1(self.state, self.target, self.length, self.heigth, self.target_radius, self._target(), self.bonus, self.scale)
         elif(self.reward_number == 2):
             magnitude = float(self.wind_map._get_magnitude([(self.state[1], self.state[2])]))
             direction = float(self.wind_map._get_direction([(self.state[1], self.state[2])])) % 360
-            return reward_2(magnitude, self.magnitude_max, direction, (self.state[1], self.state[2]), self.target, self._target(), self.scale)
+            return reward_2(magnitude, self.magnitude_max, direction, (self.state[1], self.state[2]), self.target, self._target(), self.bonus, self.scale)
         else:
             raise Exception("This reward number is not available yet")
 

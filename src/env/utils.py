@@ -3,16 +3,16 @@ import numpy as np
 
 
 
-def reward_1(state, target, length, heigth, target_radius, is_target, scale = 1):
+def reward_1(state, target, length, heigth, target_radius, is_target, bonus = 10, scale = 1):
     if is_target:
-        return 10 * scale
+        return bonus * scale
     else:
         return(- scale * ( (np.sqrt( np.sqrt((state[1]  - target[0])**2 + (state[2] - target[1])**2) - target_radius))/(np.sqrt( np.sqrt(length**2 + heigth**2 ))) ))
 
 
-def reward_2(magnitude, magnitude_max, direction, position, target, is_target, scale = 1):
+def reward_2(magnitude, magnitude_max, direction, position, target, is_target, bonus = 10, scale = 1):
     if is_target:
-        return 10 * scale
+        return bonus * scale
     else:
         if (position[0] == target[0]):
             angle = direction + np.sign(position[1] - target[1]) * 90

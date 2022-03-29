@@ -27,7 +27,8 @@ if __name__ == "__main__":
     propulsion = 'variable'
     eval_freq = 5000
     
-    scale = [0.01, 0.1, 1, 10, 100, 1000]
+    scale = 1
+    bonus = [0, 0.1, 0.5, 1]
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
@@ -36,9 +37,9 @@ if __name__ == "__main__":
     train_timesteps = 150000
     method = 'PPO'
 
-    if not os.path.exists('Exp_scale'):
-        os.mkdir('Exp_scale')
-    os.chdir('Exp_scale')
+    if not os.path.exists('Exp_bonus'):
+        os.mkdir('Exp_bonus')
+    os.chdir('Exp_bonus')
     
 
     for i in range(len(list_reward_number)):
@@ -57,15 +58,15 @@ if __name__ == "__main__":
                             os.mkdir(name)
                         os.chdir(name)
 
-                        for scale in scale:
-                                log = 'scale_'+str(scale)
+                        for bonus in bonus:
+                                log = 'bonus_'+str(bonus)
 
                                 os.mkdir(log)
                                 os.chdir(log)
                                 #Multi Porcessing
                                 
                                 policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
-                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, scale]) for seed in seeds]
+                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, bonus, scale]) for seed in seeds]
 
                                 for process in processes:
                                     process.start()
