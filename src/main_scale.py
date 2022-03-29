@@ -28,6 +28,7 @@ if __name__ == "__main__":
     eval_freq = 5000
     
     scale = [0.01, 0.1, 1, 10, 100, 1000]
+    bonus = 10
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
@@ -65,7 +66,7 @@ if __name__ == "__main__":
                                 #Multi Porcessing
                                 
                                 policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
-                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, scale]) for seed in seeds]
+                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, bonus, scale]) for seed in seeds]
 
                                 for process in processes:
                                     process.start()
