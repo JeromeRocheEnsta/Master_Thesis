@@ -70,7 +70,6 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     reward_ref = 0
     while env_ref._target() == False:
         obs, reward, done, info = env_ref.step(0)
-        print(reward)
         reward_ref += reward
     ##Plot trajectory
     fig, axs = env_ref.plot_trajectory(reward_ref)
