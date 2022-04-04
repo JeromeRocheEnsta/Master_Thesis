@@ -6,7 +6,8 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    #seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    seeds = [1]
     start = (100, 900)
     target = (800, 200)
     initial_angle = 0
@@ -14,13 +15,14 @@ if __name__ == "__main__":
     propulsion = 'variable'
     eval_freq = 2000
     
-    
+    bonus = 10
+    scale = 10
     list_ha = ['propulsion']
     list_alpha = [15]
-    list_reward_number = [2]
+    list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 8000
+    train_timesteps = 9000
     
 
     for i in range(len(list_reward_number)):
@@ -39,7 +41,7 @@ if __name__ == "__main__":
                         os.chdir(name)
                         #Multi Porcessing
 
-                        processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq]) for seed in seeds]
+                        processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, None, 'PPO', bonus, scale]) for seed in seeds]
 
                         for process in processes:
                             process.start()
