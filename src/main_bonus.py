@@ -40,7 +40,7 @@ if __name__ == "__main__":
                         alpha = list_alpha[k]
                         dt = list_dt[l]
                         gamma = list_gamma[m]
-                        name = method+'_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
+                        name = method+'_'+str(reward_number)+'_'+str(bonus)+'_'+str(scale)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         
                         if not os.path.exists(name):
                             os.mkdir(name)

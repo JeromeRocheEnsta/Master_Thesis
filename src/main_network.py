@@ -27,13 +27,14 @@ if __name__ == "__main__":
     propulsion = 'variable'
     eval_freq = 5000
     
-    
+    bonus = 10
+    scale = 1
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [2]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 150000
+    train_timesteps = 2000
     method = 'PPO'
 
     if not os.path.exists('Exp_network'):
@@ -51,7 +52,7 @@ if __name__ == "__main__":
                         alpha = list_alpha[k]
                         dt = list_dt[l]
                         gamma = list_gamma[m]
-                        name = method+'_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
+                        name = method+'_'+str(reward_number)+'_'+str(bonus)+'_'+str(scale)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         
                         if not os.path.exists(name):
                             os.mkdir(name)
@@ -67,15 +68,14 @@ if __name__ == "__main__":
                                 
                                 policy_kwargs = dict(activation_fn = valeur, net_arch = valeur2)
 
-                                for seed in seeds:
-                                    print(seed)
-                                    exec("process"+str(seed)+"= multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method])")
                                 
-                                for seed in seeds:
-                                    exec("process"+str(seed)+".start()")
-
-                                for seed in seeds:
-                                    exec("process"+str(seed)+".join()")
+                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, bonus, scale]) for seed in seeds]
+        
+                                
+                                for process in processes:
+                                    process.start()
+                                for process in processes:
+                                    process.join()
 
                                 os.chdir('../')
                         
