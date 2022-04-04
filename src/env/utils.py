@@ -28,6 +28,6 @@ def reward_2(magnitude, magnitude_max, direction, position, target, is_target, b
         return magnitude/magnitude_max * np.cos(angle * np.pi / 180) * scale
     
 
-def energy(v_prop, mu,k = 1, n = 3):
-    return(k * ( (v_prop / mu) ** n) )
+def energy(v_prop, mu, k = 0.1, n = 2):
+    return(k * ( (v_prop) ** n) )
 

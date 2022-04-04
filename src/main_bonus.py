@@ -11,7 +11,7 @@ if __name__ == "__main__":
     start = (100, 900)
     target = (800, 200)
     initial_angle = 0
-    radius = 20
+    radius = 30
     propulsion = 'variable'
     eval_freq = 5000
     
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                         alpha = list_alpha[k]
                         dt = list_dt[l]
                         gamma = list_gamma[m]
-                        name = method+'_'+str(reward_number)+'_'+str(bonus)+'_'+str(scale)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
+                        name = method+'_'+str(reward_number)+'_'+str(scale)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         
                         if not os.path.exists(name):
                             os.mkdir(name)

@@ -23,7 +23,7 @@ if __name__ == "__main__":
     start = (100, 900)
     target = (800, 200)
     initial_angle = 0
-    radius = 20
+    radius = 30
     propulsion = 'variable'
     eval_freq = 5000
     

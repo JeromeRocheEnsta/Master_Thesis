@@ -1,6 +1,7 @@
 from train import train
 import os
 import multiprocessing
+import torch as th
 
 if __name__ == "__main__":
     #########################
@@ -11,18 +12,19 @@ if __name__ == "__main__":
     start = (100, 900)
     target = (800, 200)
     initial_angle = 0
-    radius = 20
+    radius = 30
     propulsion = 'variable'
-    eval_freq = 2000
+    eval_freq = 5000
     
-    bonus = 10
-    scale = 10
+    bonus = 5
+    scale = 1
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 9000
+    train_timesteps = 150000
+    policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
     
 
     for i in range(len(list_reward_number)):
