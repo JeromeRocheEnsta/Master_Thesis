@@ -31,10 +31,10 @@ if __name__ == "__main__":
     scale = 1
     list_ha = ['propulsion']
     list_alpha = [15]
-    list_reward_number = [2]
+    list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 2000
+    train_timesteps = 150000
     method = 'PPO'
 
     if not os.path.exists('Exp_network'):

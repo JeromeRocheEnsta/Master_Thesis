@@ -16,14 +16,14 @@ if __name__ == "__main__":
     propulsion = 'variable'
     eval_freq = 5000
     
-    bonus = 5
+    bonus = 10
     scale = 1
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 150000
+    train_timesteps = 300000
     policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
     
 

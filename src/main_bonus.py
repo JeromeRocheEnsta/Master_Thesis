@@ -25,6 +25,8 @@ if __name__ == "__main__":
     train_timesteps = 150000
     method = 'PPO'
 
+    policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
+
     if not os.path.exists('Exp_bonus'):
         os.mkdir('Exp_bonus')
     os.chdir('Exp_bonus')
@@ -53,7 +55,7 @@ if __name__ == "__main__":
                                 os.chdir(log)
                                 #Multi Porcessing
                                 
-                                policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
+                                
                                 processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, bonus, scale]) for seed in seeds]
 
                                 for process in processes:
