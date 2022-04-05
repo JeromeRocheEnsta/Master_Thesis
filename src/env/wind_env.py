@@ -190,8 +190,9 @@ class WindEnv_gym(gym.Env):
                 else:
                     self.propulsion_velocity = - magnitude * cos + np.sqrt(delta)
                 
-                next_x = self.state[1] + self.dt / 3.6 * ( self.mu * np.cos(self.state[0] * np.pi / 180) + magnitude * np.cos(direction * np.pi / 180) ) 
-                next_y = self.state[2] + self.dt / 3.6 * ( self.mu * np.sin(self.state[0] * np.pi / 180) + magnitude * np.sin(direction * np.pi / 180) ) 
+                
+                next_x = self.state[1] + self.dt / 3.6 * ( self.propulsion_velocity * np.cos(self.state[0] * np.pi / 180) + magnitude * np.cos(direction * np.pi / 180) ) 
+                next_y = self.state[2] + self.dt / 3.6 * ( self.propulsion_velocity * np.sin(self.state[0] * np.pi / 180) + magnitude * np.sin(direction * np.pi / 180) ) 
             
             elif(self.ha == 'next_state'):
                 self.propulsion_velocity = np.sqrt((self.mu * np.cos(self.state[0] * np.pi / 180) - magnitude * np.cos(direction * np.pi / 180))**2 + (self.mu * np.sin(self.state[0] * np.pi / 180) - magnitude * np.sin(direction * np.pi / 180))**2 )
@@ -200,7 +201,9 @@ class WindEnv_gym(gym.Env):
                 next_y = self.state[2] + self.dt/3.6 * self.mu * np.sin(self.state[0] * np.pi / 180)
             else:
                 raise Exception("ha must be \' propulsion \' or \' next_state\' ")
-        
+
+            if(abs(np.sqrt((next_x - self.state[1])**2+(next_y - self.state[2])**2) - self.mu / 3.6 * self.dt) > 0.1):
+                raise Exception("Problem with the constant relative velocity: real distance {} target distance {} for one ts.".format(np.sqrt((next_x - self.state[1])**2+(next_y - self.state[2])**2), self.mu / 3.6 * self.dt))
         else:
             raise Exception("This propulsion system is not defined yet")
 

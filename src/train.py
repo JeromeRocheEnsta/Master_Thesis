@@ -82,7 +82,6 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
 
     # train agent
     env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale)
-    check_env(env)
     callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
     if(method == 'PPO'):
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
