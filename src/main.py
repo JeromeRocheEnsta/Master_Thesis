@@ -19,11 +19,11 @@ if __name__ == "__main__":
     bonus = 10
     scale = 1
     list_ha = ['propulsion']
-    list_alpha = [15]
+    list_alpha = [15, 20, 30, 40]
     list_reward_number = [1]
-    list_dt = [4]
+    list_dt = [2, 4]
     list_gamma = [0.9]
-    train_timesteps = 150000
+    train_timesteps = 200000
     policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
     
 
