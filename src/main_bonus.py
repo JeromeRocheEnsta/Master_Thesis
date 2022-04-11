@@ -16,7 +16,7 @@ if __name__ == "__main__":
     eval_freq = 5000
     
     scale = 1
-    bonus = [0, 1, 5, 10, 50, 100]
+    bonus = [0, 1, 5, 10, 50, 100, 1000]
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
