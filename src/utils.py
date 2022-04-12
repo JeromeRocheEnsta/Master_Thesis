@@ -75,8 +75,8 @@ def get_discrete_maps(wind_info):
     for i in range (49):
         row = i//7
         col =  i%7
-        discrete_maps[0].append((col * 1000/6, 1000 - row * 1000/6, wind_info_2[row][col][0]))
-        discrete_maps[1].append((col * 1000/6, 1000 - row * 1000/6, wind_info_2[row][col][1]))
+        discrete_maps[0].append((col * 1000/6, 1000 - row * 1000/6, wind_info[row][col][0]))
+        discrete_maps[1].append((col * 1000/6, 1000 - row * 1000/6, wind_info[row][col][1]))
 
     return discrete_maps
 
