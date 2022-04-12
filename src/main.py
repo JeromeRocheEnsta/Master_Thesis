@@ -37,7 +37,7 @@ if __name__ == "__main__":
                         alpha = list_alpha[k]
                         dt = list_dt[l]
                         gamma = list_gamma[m]
-                        name = 'png_'+str(reward_number)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
+                        name = 'png_'+str(reward_number)+'_'+str(bonus)+'_'+str(scale)+'_'+ha+'_'+str(alpha)+'_'+str(dt)+'_'+str(gamma)+'_'+str(train_timesteps)
                         
                         os.mkdir(name)
                         os.chdir(name)
