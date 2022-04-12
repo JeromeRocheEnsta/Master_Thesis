@@ -63,13 +63,13 @@ def get_data(seeds, bonus = None):
             
             if seed == 1:
                 exec('print(line)')
-                exec('timesteps.append(int(line[0]))')
+                exec('timesteps.append(float(line[0]))')
             if bonus == None:
-                exec('rewards.append(int(line[1]))')
+                exec('rewards.append(float(line[1]))')
             else:
-                exec('rewards.append(int(line[1])-bonus)')
-            exec('lengths.append(int(line[2]))')
-            exec('energies.append(int(line[3]))')
+                exec('rewards.append(float(line[1])-bonus)')
+            exec('lengths.append(float(line[2]))')
+            exec('energies.append(float(line[3]))')
             count += 1
 
         mean_reward.append(np.mean(rewards))

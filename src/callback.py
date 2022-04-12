@@ -22,7 +22,7 @@ def evaluate_policy(model, env, n_eval_episodes = 5):
         ep_lengths.append(len(env.time) - 1)
         ep_energies.append(env.energy[-1])
 
-    return(round(np.mean(ep_rewards)), round(np.mean(ep_lengths)), round(np.mean(ep_energies)))
+    return(round(np.mean(ep_rewards), 5), round(np.mean(ep_lengths)), round(np.mean(ep_energies),2))
 
 class TrackExpectedRewardCallback(BaseCallback):
     def __init__(self, eval_env, eval_freq: int, log_dir: str, n_eval_episodes: int, verbose=1):

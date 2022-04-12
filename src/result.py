@@ -50,10 +50,10 @@ def get_data(seeds):
             
             if seed == 1:
                 exec('print(line)')
-                exec('timesteps.append(int(line[0]))')
-            exec('rewards.append(int(line[1]))')
-            exec('lengths.append(int(line[2]))')
-            exec('energies.append(int(line[3]))')
+                exec('timesteps.append(float(line[0]))')
+            exec('rewards.append(float(line[1]))')
+            exec('lengths.append(float(line[2]))')
+            exec('energies.append(float(line[3]))')
             count += 1
 
         mean_reward.append(np.mean(rewards))
