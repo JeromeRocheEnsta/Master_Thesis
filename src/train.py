@@ -54,7 +54,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
         
 
     # Crete WindMap Object (Wind Field modelized with a GP)
-    discrete_maps = get_discrete_maps(wind_info_2)
+    discrete_maps = get_discrete_maps(wind_info)
     A = WindMap(discrete_maps)
 
     # Save Visualization of the wind field
@@ -133,12 +133,39 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
         file1.write('Stochastic Path ({}/10) info: \n'.format(episode + 1))
         file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(ep_reward, len(env.time) - 1, round(env.time[-1], 1), round(env.energy[-1])))
 
+
+    # Monte-Carlo estimator 
+    MonteCarlo = []
+    for episode in range(1000):
+        ep_reward = 0
+        obs = env.reset()
+        for i in range(1000):
+            action, _states = model.predict(obs, deterministic=False)
+            obs, reward, done, info = env.step(action)
+            ep_reward += reward
+            env.render()
+            if done:
+                break
+        MonteCarlo.append(ep_reward)
+
+    for idx in range(len(MonteCarlo)):
+        if idx > 0:
+            MonteCarlo[idx] += MonteCarlo[idx - 1]
+    for idx in range(len(MonteCarlo)):
+        MonteCarlo[idx] /= idx+1
+
+    plt.plot(np.linspace(1, 1000, 1000, dtype = int), MonteCarlo)
+    plt.xlabel('N')
+    plt.ylabel('N-run Monte-Carlo Estimator of the Expected Reward')
+    plt.savefig('Monte Carlo estimator')
+    plt.close(fig)
+
     del model
     del env
     del env_ref
     file1.close()
 
-    #plot_monitoring(dir_name+'/monitoring.txt')
+    
 
         
 
