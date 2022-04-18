@@ -244,7 +244,7 @@ class WindEnv_gym(gym.Env):
         axs[0,0].add_artist(a_circle)
         if ref_trajectory_x != None:
             axs[0,0].plot(ref_trajectory_x, ref_trajectory_y, 'r--')
-        axs[0,0].set_title('steps : {} ; reward : {}'.format(len(self.time) - 1,round(reward_ep), 2))
+        axs[0,0].set_title('steps : {} ; reward : {}'.format(len(self.time) - 1,round(reward_ep, 3)))
         axs[0,0].set_aspect('equal', 'box')
         axs[0,0].set_xlim([0, self.length])
         axs[0,0].set_ylim([0, self.heigth])
