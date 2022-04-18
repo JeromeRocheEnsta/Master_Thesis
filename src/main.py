@@ -23,7 +23,7 @@ if __name__ == "__main__":
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 500000
+    train_timesteps = 1000000
     policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
     
 
