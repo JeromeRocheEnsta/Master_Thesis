@@ -157,7 +157,7 @@ train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, meth
     plt.plot(np.linspace(1, 1000, 1000, dtype = int), MonteCarlo)
     plt.xlabel('N')
     plt.ylabel('N-run Monte-Carlo Estimator of the Expected Reward')
-    plt.savefig(dir_name+'Monte_Carlo_estimator.png')
+    plt.savefig(dir_name+'/Monte_Carlo_estimator.png')
     plt.close(fig)
 
     del model
