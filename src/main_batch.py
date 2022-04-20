@@ -29,7 +29,8 @@ if __name__ == "__main__":
     
     scale = 0.01
     bonus = 10
-    batchs = [1024, 2048, 4096, 8192, 16384, 32768]
+    n_steps = [1024, 2048, 4096, 8192]
+    batch_size = [64, 128, 256]
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
@@ -59,15 +60,16 @@ if __name__ == "__main__":
                             os.mkdir(name)
                         os.chdir(name)
 
-                        for batch in batchs:
-                                log = 'batch_'+str(batch)
+                        for n in n_steps:
+                            for batch in batch_size:
+                                log = str(n)+'_'+str(batch)
 
                                 os.mkdir(log)
                                 os.chdir(log)
                                 #Multi Porcessing
                                 
                                 policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
-                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, bonus, scale]) for seed in seeds]
+                                processes = [multiprocessing.Process(target = train, args = [True, propulsion, ha, alpha, reward_number, start, target, initial_angle, radius, dt, gamma, train_timesteps, seed, eval_freq, policy_kwargs, method, bonus, scale, n, batch]) for seed in seeds]
 
                                 for process in processes:
                                     process.start()
