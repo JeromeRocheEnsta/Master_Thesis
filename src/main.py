@@ -27,6 +27,9 @@ if __name__ == "__main__":
     policy_kwargs = dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])])
     
 
+    ########################################
+    ### Run Train for all configurations ###
+    ########################################
     for i in range(len(list_reward_number)):
         for j in range(len(list_ha)):
             for k in range(len(list_alpha)):
