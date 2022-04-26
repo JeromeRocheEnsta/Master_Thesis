@@ -10,8 +10,15 @@ from env.utils import reward_1, reward_2, energy
 
 
 class WindEnv_gym(gym.Env):
-    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, start = None, target = None, bonus = 10, scale = 1):
+    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None]):
         super(WindEnv_gym, self).__init__()
+
+
+        ### Reservoir Info
+        self.reservoir_use = reservoir_info[0]
+        if self.reservoir_use == True:
+            self.reservoir_capacity = reservoir_info[1]
+
 
         ### Type of dynamic
         self.straight = straight
@@ -166,6 +173,8 @@ class WindEnv_gym(gym.Env):
         self.time = [0]
         self.state = np.array([self.initial_angle, self.start[0], self.start[1]], dtype = np.float)
 
+        self.reservoir = None if self.reservoir_use == False else self.reservoir_capacity
+
         obs = np.zeros((3,), dtype = np.float)
         obs[0] = self.state[0]
         obs[1] = self.state[1]
@@ -206,19 +215,46 @@ class WindEnv_gym(gym.Env):
                 raise Exception("Problem with the constant relative velocity: real distance {} target distance {} for one ts.".format(np.sqrt((next_x - self.state[1])**2+(next_y - self.state[2])**2), self.mu / 3.6 * self.dt))
         else:
             raise Exception("This propulsion system is not defined yet")
-
-            
         
-        obs = self._next_observation(np.float(next_x), np.float(next_y) )          
 
-        self.trajectory_ha.append(self.state[0])
-        self.trajectory_x.append(self.state[1])
-        self.trajectory_y.append(self.state[2])
-        self.trajectory_action.append(action)
-        self.energy.append(self.energy[-1] + energy(self.propulsion_velocity, self.mu))
-        self.time.append(self.time[-1] + self.dt)
+        energy_step = energy(self.propulsion_velocity, self.mu)
+        # Can we perform the next step
+        if self.reservoir_use == False:
+            reservoir_condition = True
+        else:
+            if(self.reservoir >= energy_step): #check if we have enough energy to perform the step
+                reservoir_condition = True
+            else:
+                reservoir_condition = False
 
-        return(obs, self.reward(), self._target(), {})
+        
+        if reservoir_condition:
+            # We have enough energy to move
+            obs = self._next_observation(np.float(next_x), np.float(next_y) )
+
+            self.trajectory_ha.append(self.state[0])
+            self.trajectory_x.append(self.state[1])
+            self.trajectory_y.append(self.state[2])
+            self.trajectory_action.append(action)
+            self.energy.append(self.energy[-1] + energy_step)
+            self.time.append(self.time[-1] + self.dt)
+
+            if self.reservoir_use == True:
+                self.reservoir -= energy_step
+
+            return(obs, self.reward(), self._target(), {})
+        else:
+            # We don't have enough energy to continue moving
+            obs = self._next_observation(np.float(previous_coordinate[0]), np.float(previous_coordinate[1]) )
+
+            self.trajectory_ha.append(self.state[0])
+            self.trajectory_x.append(self.state[1])
+            self.trajectory_y.append(self.state[2])
+            self.trajectory_action.append(action)
+            self.energy.append(self.energy[-1])
+            self.time.append(self.time[-1] + self.dt)
+
+            return(obs, - self.bonus, True, {})
 
 
     def render(self, mode='human', close=False):
