@@ -36,7 +36,7 @@ if __name__ == "__main__":
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 150000
+    train_timesteps = 500000
     method = 'PPO'
 
     if not os.path.exists('Exp_batch'):
