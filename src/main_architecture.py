@@ -5,11 +5,11 @@ import torch as th
 
 Network = {
     1 : [dict(pi = [64,64], vf = [64,64])],
-    4 : [dict(pi = [32, 32], vf = [32, 32])],
-    5 : [dict(pi = [16, 16], vf = [16, 16])],
-    6 : [dict(pi = [8, 8], vf = [8, 8])],
-    7 : [dict(pi = [4, 4], vf = [4, 4])],
-    8 : [dict(pi = [8], vf = [8])]
+    2 : [dict(pi = [32, 32], vf = [32, 32])],
+    3 : [dict(pi = [16, 16], vf = [16, 16])],
+    4 : [dict(pi = [8, 8], vf = [8, 8])],
+    5 : [dict(pi = [4, 4], vf = [4, 4])],
+    6 : [dict(pi = [8], vf = [8])]
 }
 
 Activation  = {

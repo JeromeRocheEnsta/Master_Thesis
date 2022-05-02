@@ -254,7 +254,7 @@ class WindEnv_gym(gym.Env):
             self.energy.append(self.energy[-1])
             self.time.append(self.time[-1] + self.dt)
 
-            return(obs, - self.bonus, True, {})
+            return(obs, 0, True, {})
 
 
     def render(self, mode='human', close=False):
