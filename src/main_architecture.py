@@ -5,14 +5,15 @@ import torch as th
 
 Network = {
     1 : [dict(pi = [64,64], vf = [64,64])],
-    2 : [dict(pi = [100,50,25], vf = [100,50,25])],
-    3 : [dict(pi = [400, 300], vf = [400, 300])],
+    4 : [dict(pi = [32, 32], vf = [32, 32])],
+    5 : [dict(pi = [16, 16], vf = [16, 16])],
+    6 : [dict(pi = [8, 8], vf = [8, 8])],
+    7 : [dict(pi = [4, 4], vf = [4, 4])],
+    8 : [dict(pi = [8], vf = [8])]
 }
 
 Activation  = {
-    'relu' : th.nn.ReLU,
     'tanh' : th.nn.Tanh,
-    'leakyrelu' : th.nn.LeakyReLU
 }
 
 if __name__ == "__main__":
@@ -37,9 +38,9 @@ if __name__ == "__main__":
     train_timesteps = 150000
     method = 'PPO'
 
-    if not os.path.exists('Exp_network'):
-        os.mkdir('Exp_network')
-    os.chdir('Exp_network')
+    if not os.path.exists('Exp_architecture'):
+        os.mkdir('Exp_architecture')
+    os.chdir('Exp_architecture')
     
 
     for i in range(len(list_reward_number)):

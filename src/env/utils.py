@@ -28,6 +28,14 @@ def reward_2(magnitude, magnitude_max, direction, position, target, is_target, b
         return magnitude/magnitude_max * np.cos(angle * np.pi / 180) * scale
     
 
+def reward_sparse(is_target, scale = 1):
+    if is_target:
+        return scale
+    else:
+        return 0
+
+
+
 def energy(v_prop, mu, k = 0.1, n = 2):
     return(k * ( (v_prop) ** n) )
 
