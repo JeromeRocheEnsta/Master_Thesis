@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.ioff()
 from env.wind.wind_map import WindMap
+import scipy.stats as st
 
 
 
@@ -136,20 +137,82 @@ def plot_monitoring(file: str, log_dir = None):
     plt.show()
 
 
-        
+def get_data(seeds, scale = None, bonus = None):
+    ## Need the current path to be in the directory containing the seeds directory
+    n = len(seeds)
+    mean_reward = []
+    mean_length = []
+    mean_energy = []
+    if (n > 1):
+        ci_reward = []
+        ci_length = []
+        ci_energy = []
+    timesteps = []
 
-'''
-X = np.linspace(0, 1000, 1000)
-Y = np.linspace(0, 1000, 1000)
-Z = np.zeros( (len(Y), len(X)) )
-for i in range(len(X)):
-    for j in range(len(Y)):
-        if( ( (X[i]-target[0])**2 + (Y[j] - target[1])**2 > radius**2)):
-            Z[j][i] = (-  ( np.sqrt( (np.sqrt((X[i] - target[0])**2 + (Y[j] - target[1])**2) - radius) ))/(np.sqrt(np.sqrt(2)*1000)) )
-        else:
-            Z[j][i] = 1
+    ## Extract ref paths info
 
-plt.contourf(X, Y, Z, 40, cmap='RdGy')
-plt.colorbar()
-plt.show()
-'''
+    file_ref_path = open('seed_1/info.txt', 'r')
+    file_ref_path.readline()
+    ref_line = file_ref_path.readline()
+    ref_line = ref_line.split()
+    ref_reward = float(ref_line[3][:-1]) if bonus == None else float(ref_line[3][:-1]) - bonus
+    ref_reward = ref_reward if scale == None else ref_reward/scale
+    ref_length = float(ref_line[6][:-1])
+    ref_energy = float(ref_line[13])
+    file_ref_path.close()
+
+    file_timestep = open('seed_1/monitoring.txt', 'r')
+    ts= 0
+    for _ in file_timestep:
+        ts+=1
+    file_timestep.close()
+
+
+    for seed in seeds:
+        exec('file'+str(seed)+'=open("seed_'+str(seed)+'/monitoring.txt", "r")')
+
+    
+    for _ in range(ts):
+        count = 1
+        rewards =[]
+        lengths = []
+        energies = []
+        for seed in seeds:
+            print(seed)
+            exec('line = file'+str(seed)+'.readline()')
+            exec('line = line.split()')
+            
+            if seed == 1:
+                exec('print(line)')
+                exec('timesteps.append(float(line[0]))')
+
+            if scale == None:
+                if bonus == None:
+                    exec('rewards.append(float(line[1]))')
+                else:
+                    exec('rewards.append(float(line[1])-bonus)')
+            else:
+                if bonus == None:
+                    exec('rewards.append(float(line[1])/scale)')
+                else:
+                    exec('rewards.append((float(line[1])-bonus)/scale)')
+            exec('lengths.append(float(line[2]))')
+            exec('energies.append(float(line[3]))')
+            count += 1
+
+        mean_reward.append(np.mean(rewards))
+        mean_length.append(np.mean(lengths))
+        mean_energy.append(np.mean(energies))
+        if (n > 1) :
+            t = st.t.ppf(0.975, n-1)
+            ci_reward.append(t*np.sqrt(np.var(rewards)/n))
+            ci_length.append(t*np.sqrt(np.var(lengths)/n))
+            ci_energy.append(t*np.sqrt(np.var(energies)/n))
+
+    for seed in seeds:
+        exec('file'+str(seed)+'.close()')
+    
+    if(n > 1):
+        return (timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy)
+    else:
+        return(timesteps, mean_reward, mean_length, mean_energy, ref_reward, ref_length, ref_energy)
