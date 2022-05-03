@@ -41,12 +41,51 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
     return func
 
 
-def train(save = False, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
-start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99,
-train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = 'PPO', bonus = 10 ,
-scale = 1, n_steps = 2048, batch_size = 64, reservoir_info = [False, None], Curriculum = None):
+def train(log_kwargs = {'save' : False, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000},
+environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900), 'target' : (800, 200),
+'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0},
+model_kwargs = {'gamma' : 0.99, 'policy_kwargs' : None, 'train_timesteps' : 150000, 'method' : 'PPO','n_steps' : 2048,
+'batch_size' : 64},
+reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
+constraint_kwargs = {'reservoir_info' : [False, None]},
+seed = 1):
     print("Execution de train avec seed = {}".format(seed))
     
+    ### Preprocess args
+    # log_kwargs
+    save = log_kwargs['save']
+    n_eval_episodes_callaback = 5 if log_kwargs.get('n_eval_episodes_callaback') == None else log_kwargs['n_eval_episodes_callaback']
+    eval_freq = log_kwargs['eval_freq'] if log_kwargs.get('eval_freq') != None else 5000
+    #environment_kwargs
+    propulsion = environment_kwargs['propulsion']
+    ha = environment_kwargs['ha']
+    alpha = environment_kwargs['alpha']
+    start = environment_kwargs['start']
+    target = environment_kwargs['target']
+    radius = environment_kwargs['radius']
+    dt = environment_kwargs['dt']
+    initial_angle = environment_kwargs['initial_angle']
+
+    #model_kwargs
+    gamma = model_kwargs['gamma']
+    policy_kwargs = model_kwargs.get('policy_kwargs')
+    if model_kwargs.get('Curriculum') == None:
+        train_timesteps = model_kwargs['train_timesteps']
+        Curriculum = None
+    else:
+        Curriculum = model_kwargs['Curriculum']
+    method = model_kwargs['method'] if model_kwargs.get('method') != None else 'PPO'
+    n_steps = model_kwargs['n_steps'] if model_kwargs.get('n_steps') != None else 2048
+    batch_size = model_kwargs['batch_size'] if model_kwargs.get('batch_size') != None else 64
+
+    #rewrd_kwargs
+    reward_number = reward_kwargs['reward_number'] if reward_kwargs.get('reward_number') != None else 1
+    scale = reward_kwargs['scale'] if reward_kwargs.get('scale') != None else 1
+    bonus = reward_kwargs['bonus'] if reward_kwargs.get('bonus') != None else 10
+
+    #constraint_kwargs
+    reservoir_info = constraint_kwargs['reservoir_info'] if constraint_kwargs.get('reservoir_info') != None else [False, None]
+
     # MKDIR to stock figures output
     if save:
         dir_name = 'seed_'+str(seed)
@@ -84,7 +123,7 @@ scale = 1, n_steps = 2048, batch_size = 64, reservoir_info = [False, None], Curr
     # train agent
     if Curriculum == None:
         env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
-        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
+        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callaback)
         if(method == 'PPO'):
             model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
         else:
@@ -98,7 +137,7 @@ scale = 1, n_steps = 2048, batch_size = 64, reservoir_info = [False, None], Curr
         ts = Curriculum['ts']
         env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
-        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
+        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callaback)
         for i in range(len(constraint)):
             env.reservoir_use = True
             env.reservoir_capacity = constraint[i]

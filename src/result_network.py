@@ -20,7 +20,7 @@ color = {
 
 if __name__ == "__main__":
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    network = ['tanh_1', 'tanh_4', 'tanh_5', 'tanh_6', 'tanh_7', 'tanh_8']
+    network = ['tanh_1', 'tanh_2', 'tanh_3', 'tanh_4', 'tanh_5', 'tanh_6']
 
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     for idx, net in enumerate(network):
         os.chdir(net)
-        timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds)
+        timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds, scale = 0.01)
         
         ### Reward plot
         up = []
