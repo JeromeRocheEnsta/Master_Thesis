@@ -92,7 +92,7 @@ def get_data(seeds, bonus = None):
 
 if __name__ == "__main__":
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    network = ['leakyrelu_1', 'leakyrelu_2', 'leakyrelu_3', 'relu_1', 'relu_2', 'relu_3', 'tanh_1', 'tanh_2', 'tanh_3']
+    network = ['tanh_1', 'tanh_4', 'tanh_5', 'tanh_6', 'tanh_7', 'tanh_8']
 
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)

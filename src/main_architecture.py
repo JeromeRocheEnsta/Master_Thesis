@@ -29,13 +29,13 @@ if __name__ == "__main__":
     eval_freq = 5000
     
     bonus = 10
-    scale = 1
+    scale = 0.01
     list_ha = ['propulsion']
     list_alpha = [15]
     list_reward_number = [1]
     list_dt = [4]
     list_gamma = [0.9]
-    train_timesteps = 150000
+    train_timesteps = 200000
     method = 'PPO'
 
     if not os.path.exists('Exp_architecture'):
