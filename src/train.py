@@ -44,7 +44,7 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 def train(save = False, propulsion = 'variable', ha = 'propulsion', alpha = 15, reward_number = 1,
 start = (100, 900), target = (800, 200), initial_angle = 0, radius = 20, dt = 1.8, gamma = 0.99,
 train_timesteps = 150000, seed = 1, eval_freq = 1000, policy_kwargs = None, method = 'PPO', bonus = 10 ,
-scale = 1, n_steps = 2048, batch_size = 64, reservoir_info = [False, None]):
+scale = 1, n_steps = 2048, batch_size = 64, reservoir_info = [False, None], Curriculum = None):
     print("Execution de train avec seed = {}".format(seed))
     
     # MKDIR to stock figures output
@@ -82,16 +82,30 @@ scale = 1, n_steps = 2048, batch_size = 64, reservoir_info = [False, None]):
     
 
     # train agent
-    env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
-    callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
-    if(method == 'PPO'):
-        model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
-    elif(method == 'SAC'):
-        print('SAC')
-        model = SAC("MlpPolicy", env, verbose = 0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed)
-    print('Begin training with seed {}'.format(seed))
-    model.learn(total_timesteps= train_timesteps, callback = callback)
-    print('End training with seed {}'.format(seed))
+    if Curriculum == None:
+        env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
+        if(method == 'PPO'):
+            model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
+        else:
+            raise Exception("This method is not available")
+        print('Begin training with seed {}'.format(seed))
+        model.learn(total_timesteps= train_timesteps, callback = callback)
+        print('End training with seed {}'.format(seed))
+    else:
+        constraint = Curriculum['constraint']
+        learning_rate = Curriculum['learning_rate']
+        ts = Curriculum['ts']
+        env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+        model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
+        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= 5)
+        for i in range(len(constraint)):
+            env.reservoir_use = True
+            env.reservoir_capacity = constraint[i]
+            model.learning_rate = learning_rate[i]
+            model.learn(total_timesteps = ts[i], callback = callback)
+
+        
 
     # Deterministic Path
     ep_reward = 0
