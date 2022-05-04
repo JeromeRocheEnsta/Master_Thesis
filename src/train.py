@@ -52,10 +52,12 @@ seed = 1):
     print("Execution de train avec seed = {}".format(seed))
     
     ### Preprocess args
+    
     # log_kwargs
     save = log_kwargs['save']
     n_eval_episodes_callaback = 5 if log_kwargs.get('n_eval_episodes_callaback') == None else log_kwargs['n_eval_episodes_callaback']
     eval_freq = log_kwargs['eval_freq'] if log_kwargs.get('eval_freq') != None else 5000
+
     #environment_kwargs
     propulsion = environment_kwargs['propulsion']
     ha = environment_kwargs['ha']
