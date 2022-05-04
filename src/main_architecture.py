@@ -4,12 +4,15 @@ import multiprocessing
 import torch as th
 
 Network = {
-    1 : [dict(pi = [64,64], vf = [64,64])],
-    2 : [dict(pi = [32, 32], vf = [32, 32])],
-    3 : [dict(pi = [16, 16], vf = [16, 16])],
-    4 : [dict(pi = [8, 8], vf = [8, 8])],
-    5 : [dict(pi = [4, 4], vf = [4, 4])],
-    6 : [dict(pi = [8], vf = [8])]
+    # 1 : [dict(pi = [64,64], vf = [64,64])],
+    # 2 : [dict(pi = [32, 32], vf = [32, 32])],
+    # 3 : [dict(pi = [16, 16], vf = [16, 16])],
+    # 4 : [dict(pi = [8, 8], vf = [8, 8])],
+    # 5 : [dict(pi = [4, 4], vf = [4, 4])],
+    # 6 : [dict(pi = [8], vf = [8])],
+    7 : [16, dict(pi = [16], vf = [16])],
+    8 : [16, dict(vf = [16])],
+    9 : [16, dict(pi = [16])],
 }
 
 Activation  = {
@@ -36,7 +39,7 @@ if __name__ == "__main__":
     model_kwargs = {
         'gamma' : 0.90,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 1000,
+        'train_timesteps' : 200000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
