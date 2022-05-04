@@ -45,9 +45,9 @@ if __name__ == "__main__":
     bonuses = [0, 1, 5, 10, 50, 100, 1000]
     
 
-    if not os.path.exists('Exp_scale'):
-        os.mkdir('Exp_scale')
-    os.chdir('Exp_scale')
+    if not os.path.exists('Exp_bonus'):
+        os.mkdir('Exp_bonus')
+    os.chdir('Exp_bonus')
     
 
     name = model_kwargs['method']+'_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
