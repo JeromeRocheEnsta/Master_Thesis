@@ -34,7 +34,7 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 0.90,
+        'gamma' : 1,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
         'train_timesteps' : 1000,
         'method' : 'PPO',
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 1,
+        'reward_number' : 3,
         'scale' : 0.01,
         'bonus': 10
     }

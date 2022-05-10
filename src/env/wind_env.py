@@ -5,7 +5,7 @@ plt.ioff()
 import random
 import gym
 from gym import spaces
-from env.utils import reward_1, reward_2, energy
+from env.utils import reward_1, reward_2, reward_sparse, energy
 
 
 
@@ -268,6 +268,8 @@ class WindEnv_gym(gym.Env):
             magnitude = float(self.wind_map._get_magnitude([(self.state[1], self.state[2])]))
             direction = float(self.wind_map._get_direction([(self.state[1], self.state[2])])) % 360
             return reward_2(magnitude, self.magnitude_max, direction, (self.state[1], self.state[2]), self.target, self._target(), self.bonus, self.scale)
+        elif(self.reward_number == 3):
+            return reward_sparse(self._target(), self.scale)
         else:
             raise Exception("This reward number is not available yet")
 
