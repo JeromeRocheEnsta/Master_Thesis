@@ -9,7 +9,6 @@ from env.wind.wind_map import *
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3 import PPO
-from stable_baselines3 import SAC
 from typing import Callable
 from callback import TrackExpectedRewardCallback
 
@@ -145,7 +144,6 @@ seed = 1):
             env.reservoir_capacity = constraint[i]
             model.learning_rate = learning_rate[i]
             model.learn(total_timesteps = ts[i], callback = callback)
-
         
 
     # Deterministic Path

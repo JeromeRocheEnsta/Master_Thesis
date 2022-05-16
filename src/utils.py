@@ -136,6 +136,9 @@ def plot_monitoring(file: str, log_dir = None):
     plt.ylabel('Expected Energy')
     plt.show()
 
+def filter():
+    pass
+
 
 def get_data(seeds, scale = None, bonus = None):
     ## Need the current path to be in the directory containing the seeds directory
