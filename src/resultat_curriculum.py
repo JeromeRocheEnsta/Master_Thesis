@@ -18,14 +18,11 @@ color = {
 
 Curriculum = {
     0 : {
-        'constraint' : [],
-        'learning_rate' : [],
-        'ts' : [200000]
     },
     1 : {
         'constraint' : [30000, 20000, 10000, 5000, 1000],
-        'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00005, 0.000005],
-        'ts' : [30000, 30000, 40000, 40000, 50000]
+        'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00001, 0.000005],
+        'ts' : [50000, 50000, 50000, 50000, 50000]
     }
 }
 
@@ -47,47 +44,101 @@ if __name__ == "__main__":
         os.chdir('curriculum_'+str(cle))
         timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds)
         
-        ### Reward plot
-        up = []
-        down = []
-        for i in range(len(timesteps)):
-            up.append(mean_reward[i] + ci_reward[i])
-            down.append(mean_reward[i] - ci_reward[i])
 
-        ax[0].plot(timesteps,mean_reward, color = color[cle], label = 'Curriculum ='+str(cle))
-        ax[0].fill_between(timesteps, down, up, color= color[cle], alpha=.1)
-        ax[0].axhline(y=ref_reward, color='r', linestyle='-')
-        ax[0].set_xlabel('Timesteps')
-        ax[0].set_ylabel('Average Reward')
+        if cle == 0:
+            ### Reward plot
+            up = []
+            down = []
+            for i in range(len(timesteps)):
+                up.append(mean_reward[i] + ci_reward[i])
+                down.append(mean_reward[i] - ci_reward[i])
 
-        ### Length plot
-        up = []
-        down = []
-        for i in range(len(timesteps)):
-            up.append(mean_length[i] + ci_length[i])
-            down.append(mean_length[i] - ci_length[i])
+            ax[0].plot(timesteps,mean_reward, color = color[cle], label = 'Curriculum ='+str(cle))
+            ax[0].fill_between(timesteps, down, up, color= color[cle], alpha=.1)
+            ax[0].axhline(y=ref_reward, color='r', linestyle='-')
+            ax[0].set_xlabel('Timesteps')
+            ax[0].set_ylabel('Average Reward')
 
-
-        ax[1].plot(timesteps,mean_length, color = color[idx])
-        ax[1].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
-        ax[1].axhline(y=ref_length, color='r', linestyle='-')
-        ax[1].set_xlabel('Timesteps')
-        ax[1].set_ylabel('Average Length')
+            ### Length plot
+            up = []
+            down = []
+            for i in range(len(timesteps)):
+                up.append(mean_length[i] + ci_length[i])
+                down.append(mean_length[i] - ci_length[i])
 
 
-        ### Energy plot
-        up = []
-        down = []
-        for i in range(len(timesteps)):
-            up.append(mean_energy[i] + ci_energy[i])
-            down.append(mean_energy[i] - ci_energy[i])
+            ax[1].plot(timesteps,mean_length, color = color[idx])
+            ax[1].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
+            ax[1].axhline(y=ref_length, color='r', linestyle='-')
+            ax[1].set_xlabel('Timesteps')
+            ax[1].set_ylabel('Average Length')
 
-        ax[2].plot(timesteps,mean_energy, color = color[idx])
-        ax[2].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
-        ax[2].axhline(y=ref_energy, color='r', linestyle='-')
-        ax[2].set_xlabel('Timesteps')
-        ax[2].set_ylabel('Average Energy')
 
+            ### Energy plot
+            up = []
+            down = []
+            for i in range(len(timesteps)):
+                up.append(mean_energy[i] + ci_energy[i])
+                down.append(mean_energy[i] - ci_energy[i])
+
+            ax[2].plot(timesteps,mean_energy, color = color[idx])
+            ax[2].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
+            ax[2].axhline(y=ref_energy, color='r', linestyle='-')
+            ax[2].set_xlabel('Timesteps')
+            ax[2].set_ylabel('Average Energy')
+        else:
+            ts = valeur['ts']
+            n_curves = len(ts)
+            I = [0]
+            counter = 0
+            for i in range(n_curves):
+                counter += ts[i]
+                for idx, x in enumerate(timesteps):
+                    if x == counter:
+                        I.append(idx)
+            
+            ### Reward plot
+            up = []
+            down = []
+            for i in range(len(timesteps)):
+                up.append(mean_reward[i] + ci_reward[i])
+                down.append(mean_reward[i] - ci_reward[i])
+                
+            for i in range(len(I)-1):
+                ax[0].plot(timesteps[I[i]:I[i+1]+1],mean_reward[I[i]:I[i+1]+1], color = color[cle], label = 'Curriculum ='+str(cle))
+                ax[0].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color= color[cle], alpha=.1)
+            ax[0].axhline(y=ref_reward, color='r', linestyle='-')
+            ax[0].set_xlabel('Timesteps')
+            ax[0].set_ylabel('Average Reward')
+
+            ### Length plot
+            up = []
+            down = []
+            for i in range(len(timesteps)):
+                up.append(mean_length[i] + ci_length[i])
+                down.append(mean_length[i] - ci_length[i])
+
+            for i in range(len(I)-1):            
+                ax[1].plot(timesteps[I[i]:I[i+1]+1],mean_length[I[i]:I[i+1]+1], color = color[idx])
+                ax[1].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color=color[idx], alpha=.1)
+            ax[1].axhline(y=ref_length, color='r', linestyle='-')
+            ax[1].set_xlabel('Timesteps')
+            ax[1].set_ylabel('Average Length')
+
+
+            ### Energy plot
+            up = []
+            down = []
+            for i in range(len(timesteps)):
+                up.append(mean_energy[i] + ci_energy[i])
+                down.append(mean_energy[i] - ci_energy[i])
+
+            for i in range(len(I)-1):
+                ax[2].plot(timesteps[I[i]:I[i+1]+1],mean_energy[I[i]:I[i+1]+1], color = color[idx])
+                ax[2].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color=color[idx], alpha=.1)
+            ax[2].axhline(y=ref_energy, color='r', linestyle='-')
+            ax[2].set_xlabel('Timesteps')
+            ax[2].set_ylabel('Average Energy')
 
         os.chdir('../')
     
