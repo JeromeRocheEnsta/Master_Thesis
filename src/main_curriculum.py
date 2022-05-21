@@ -5,10 +5,7 @@ import torch as th
 
 Curriculum = {
     0 : {
-        'constraint' : [100000]
-        'learning_rate' : []
-
-    }
+    },
     1 : {
         'constraint' : [30000, 20000, 10000, 5000, 1000],
         'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00001, 0.000005],
