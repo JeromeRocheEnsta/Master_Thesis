@@ -12,7 +12,7 @@ color = {
     2 : 'red',
     3 : 'black',
     4 : 'magenta',
-    5 : 'cyan'
+    5 : 'yellow'
 }
 
 if __name__ == "__main__":
