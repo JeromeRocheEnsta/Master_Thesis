@@ -4,6 +4,11 @@ import multiprocessing
 import torch as th
 
 Curriculum = {
+    0 : {
+        'constraint' : [100000]
+        'learning_rate' : []
+
+    }
     1 : {
         'constraint' : [30000, 20000, 10000, 5000, 1000],
         'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00001, 0.000005],
@@ -32,7 +37,7 @@ if __name__ == "__main__":
     model_kwargs = {
         'gamma' : 0.90,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 1000,
+        'train_timesteps' : 200000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
@@ -69,7 +74,9 @@ if __name__ == "__main__":
         os.mkdir(log)
         os.chdir(log)
 
-        model_kwargs['Curriculum'] = valeur
+        if cle != 0:
+            model_kwargs['Curriculum'] = valeur ## Work because the key 'Curriculum' is not affected for cle == 0
+
 
         #Multi Porcessing
         processes = [multiprocessing.Process(target = train, args = [log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed]) for seed in seeds]
