@@ -75,7 +75,7 @@ if __name__ == "__main__":
         if not os.path.exists(log):
             os.mkdir(log)
         else:
-            break
+            continue
         os.chdir(log)
 
         if cle != 0:
