@@ -10,6 +10,11 @@ Curriculum = {
         'constraint' : [30000, 20000, 10000, 5000, 1000],
         'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00001, 0.000005],
         'ts' : [50000, 50000, 50000, 50000, 50000]
+    },
+    2: {
+        'constraint' : [30000, 20000, 10000, 5000, 4000, 3000, 2000, 1000],
+        'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00001, 0.00001, 0.00001, 0.00001, 0.000005],
+        'ts' : [50000, 50000, 50000, 50000, 30000, 30000, 30000, 30000]
     }
 }
 
@@ -34,7 +39,7 @@ if __name__ == "__main__":
     model_kwargs = {
         'gamma' : 0.90,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 200000,
+        'train_timesteps' : 200000, ## For Curriculum 0
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
@@ -66,7 +71,6 @@ if __name__ == "__main__":
     os.chdir(name)
 
     for cle, valeur in Curriculum.items():
-        
         log =  'curriculum_' + str(cle)
         os.mkdir(log)
         os.chdir(log)
@@ -74,14 +78,14 @@ if __name__ == "__main__":
         if cle != 0:
             model_kwargs['Curriculum'] = valeur ## Work because the key 'Curriculum' is not affected for cle == 0
 
-
+        if cle == 2:
         #Multi Porcessing
-        processes = [multiprocessing.Process(target = train, args = [log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed]) for seed in seeds]
+            processes = [multiprocessing.Process(target = train, args = [log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed]) for seed in seeds]
             
-        for process in processes:
-            process.start()
-        for process in processes:
-            process.join()
+            for process in processes:
+                process.start()
+            for process in processes:
+                process.join()
 
         os.chdir('../')
                         

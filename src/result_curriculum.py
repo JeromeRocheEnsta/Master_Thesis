@@ -67,8 +67,8 @@ if __name__ == "__main__":
                 down.append(mean_length[i] - ci_length[i])
 
 
-            ax[1].plot(timesteps,mean_length, color = color[idx])
-            ax[1].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
+            ax[1].plot(timesteps,mean_length, color = color[cle])
+            ax[1].fill_between(timesteps, down, up, color=color[cle], alpha=.1)
             ax[1].axhline(y=ref_length, color='r', linestyle='-')
             ax[1].set_xlabel('Timesteps')
             ax[1].set_ylabel('Average Length')
@@ -81,8 +81,8 @@ if __name__ == "__main__":
                 up.append(mean_energy[i] + ci_energy[i])
                 down.append(mean_energy[i] - ci_energy[i])
 
-            ax[2].plot(timesteps,mean_energy, color = color[idx])
-            ax[2].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
+            ax[2].plot(timesteps,mean_energy, color = color[cle])
+            ax[2].fill_between(timesteps, down, up, color=color[cle], alpha=.1)
             ax[2].axhline(y=ref_energy, color='r', linestyle='-')
             ax[2].set_xlabel('Timesteps')
             ax[2].set_ylabel('Average Energy')
@@ -105,7 +105,10 @@ if __name__ == "__main__":
                 down.append(mean_reward[i] - ci_reward[i])
                 
             for i in range(len(I)-1):
-                ax[0].plot(timesteps[I[i]:I[i+1]+1],mean_reward[I[i]:I[i+1]+1], color = color[cle], label = 'Curriculum ='+str(cle))
+                if i == 0:
+                    ax[0].plot(timesteps[I[i]:I[i+1]+1],mean_reward[I[i]:I[i+1]+1], color = color[cle], label = 'Curriculum ='+str(cle))
+                else:
+                    ax[0].plot(timesteps[I[i]:I[i+1]+1],mean_reward[I[i]:I[i+1]+1], color = color[cle])
                 ax[0].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color= color[cle], alpha=.1)
             ax[0].axhline(y=ref_reward, color='r', linestyle='-')
             ax[0].set_xlabel('Timesteps')
@@ -118,9 +121,9 @@ if __name__ == "__main__":
                 up.append(mean_length[i] + ci_length[i])
                 down.append(mean_length[i] - ci_length[i])
 
-            for i in range(len(I)-1):            
-                ax[1].plot(timesteps[I[i]:I[i+1]+1],mean_length[I[i]:I[i+1]+1], color = color[idx])
-                ax[1].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color=color[idx], alpha=.1)
+            for i in range(len(I)-1):  
+                ax[1].plot(timesteps[I[i]:I[i+1]+1],mean_length[I[i]:I[i+1]+1], color = color[cle])
+                ax[1].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color=color[cle], alpha=.1)
             ax[1].axhline(y=ref_length, color='r', linestyle='-')
             ax[1].set_xlabel('Timesteps')
             ax[1].set_ylabel('Average Length')
@@ -134,8 +137,8 @@ if __name__ == "__main__":
                 down.append(mean_energy[i] - ci_energy[i])
 
             for i in range(len(I)-1):
-                ax[2].plot(timesteps[I[i]:I[i+1]+1],mean_energy[I[i]:I[i+1]+1], color = color[idx])
-                ax[2].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color=color[idx], alpha=.1)
+                ax[2].plot(timesteps[I[i]:I[i+1]+1],mean_energy[I[i]:I[i+1]+1], color = color[cle])
+                ax[2].fill_between(timesteps[I[i]:I[i+1]+1], down[I[i]:I[i+1]+1], up[I[i]:I[i+1]+1], color=color[cle], alpha=.1)
             ax[2].axhline(y=ref_energy, color='r', linestyle='-')
             ax[2].set_xlabel('Timesteps')
             ax[2].set_ylabel('Average Energy')
