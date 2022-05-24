@@ -72,20 +72,22 @@ if __name__ == "__main__":
 
     for cle, valeur in Curriculum.items():
         log =  'curriculum_' + str(cle)
-        os.mkdir(log)
+        if not os.path.exists(log):
+            os.mkdir(log)
+        else:
+            break
         os.chdir(log)
 
         if cle != 0:
             model_kwargs['Curriculum'] = valeur ## Work because the key 'Curriculum' is not affected for cle == 0
 
-        if cle == 2:
         #Multi Porcessing
-            processes = [multiprocessing.Process(target = train, args = [log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed]) for seed in seeds]
-            
-            for process in processes:
-                process.start()
-            for process in processes:
-                process.join()
+        processes = [multiprocessing.Process(target = train, args = [log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed]) for seed in seeds]
+        
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
 
         os.chdir('../')
                         
