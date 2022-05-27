@@ -9,7 +9,7 @@ if __name__ == "__main__":
     ### Control interface ###
     #########################
     log_kwargs = {
-        'save' : False
+        'save' : True
     }
     
     environment_kwargs = {
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     
     reward_kwargs = {
         'reward_number' : 1,
-        'scale' : 1,
+        'scale' : 0.01,
         'bonus': 10
     }
 
@@ -41,6 +41,7 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
+    seed = 0
 
     ########################################
     ### Run Train for all configurations ###
@@ -49,7 +50,7 @@ if __name__ == "__main__":
     os.mkdir(name)
     os.chdir(name)
 
-    train(log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs)
+    train(log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed)
 
     os.chdir('../')
 

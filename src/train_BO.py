@@ -40,42 +40,6 @@ SMOKE_TEST = os.environ.get("SMOKE_TEST")
 ##### Wind Env #####
 ####################
 
-def policy(theta, s):
-    '''
-    input : two torch.tensor respectively the policy parameters and the state
-    output : action
-    '''
-    if( float(torch.matmul(theta, s)) > 0):
-        return 1
-    else:
-        return 0
-
-
-def black_box_function(theta, n_episode_eval = 1000):
-    Expected_reward = 0
-    for i in range(n_episode_eval):
-        state = env.reset(seed = seed+i)
-        #img = plt.imshow(env.render(mode='rgb_array'))
-        ep_reward = 0
-        for _ in range(1000):
-            #img.set_data(env.render(mode='rgb_array'))
-            #display.display(plt.gcf())
-            #display.clear_output(wait=True)
-
-            s = torch.from_numpy(state).reshape(4,1)
-            s = s.type('torch.DoubleTensor')
-            action = policy(theta, s)
-
-            state, reward, done, info = env.step(action)
-            ep_reward += reward
-            if done:
-                break
-        Expected_reward += ep_reward
-    Expected_reward /= n_episode_eval
-    return Expected_reward
-
-theta = torch.tensor([3, 5, 2, 1], dtype = torch.float64)
-
 
 def train( log_kwargs = {'save' : False},
 environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900),
@@ -84,9 +48,12 @@ model_kwargs = {'gamma' : 0.99, 'n_eval_episodes' : 1000, 'dim' : 4,
 'bounds' : torch.tensor([ [-1, -1, -1, -1] , [1, 1, 1, 1] ], dtype = torch.float64),
 'batch_size' : 4}, #method within qEI, Sobol, TuRBO
 reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
-constraint_kwargs = {'reservoir_info' : [False, None]}):
+constraint_kwargs = {'reservoir_info' : [False, None]},
+seed = 0):
     ### Preprocess args
     
+    torch.manual_seed(seed)
+    #np.random.seed(seed)
     
     # log_kwargs
     save = log_kwargs['save']
@@ -117,6 +84,9 @@ constraint_kwargs = {'reservoir_info' : [False, None]}):
     #constraint_kwargs
     reservoir_info = constraint_kwargs['reservoir_info'] if constraint_kwargs.get('reservoir_info') != None else [False, None]
 
+    if save:
+        dir_name = 'seed_'+str(seed)
+        os.mkdir(dir_name)
 
     # Crete WindMap Object (Wind Field modelized with a GP)
     discrete_maps = get_discrete_maps(wind_info)
@@ -124,7 +94,7 @@ constraint_kwargs = {'reservoir_info' : [False, None]}):
     # Save Visualization of the wind field
     fig = plot_wind_field(A, start, target)
     if save:
-        plt.savefig('wind_field.png')
+        plt.savefig(dir_name+'/wind_field.png')
     plt.close(fig)
 
 
@@ -139,7 +109,7 @@ constraint_kwargs = {'reservoir_info' : [False, None]}):
     ##Plot trajectory
     fig, axs = env_ref.plot_trajectory(reward_ref)
     if save:
-        plt.savefig('ref_path.png')
+        plt.savefig(dir_name+'/ref_path.png')
     plt.close(fig)
 
 
@@ -147,32 +117,32 @@ constraint_kwargs = {'reservoir_info' : [False, None]}):
     env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
 
     X_turbo, Y_turbo = TuRBO(env, dim, n_init, bounds, n_eval_episodes, batch_size)
-    n_iter = len(X_turbo) - n_init
+    n_iter = len(X_turbo)
     X_ei, Y_ei = qEI(env, dim, bounds, n_eval_episodes, n_init, batch_size, n_iter)
     X_Sobol, Y_Sobol = Sobol(env, dim, bounds, n_eval_episodes, n_iter)
 
 
 
-    # Visualization
+    # Visualization Search
 
     names = ["TuRBO-1", "EI", "Sobol"]
     runs = [Y_turbo, Y_ei, Y_Sobol]
-    fig, ax = plt.subplots(figsize=(8, 10))
+    fig, ax = plt.subplots(figsize = (8,8))
 
     for name, run in zip(names, runs):
         fx = np.maximum.accumulate(run.cpu())
-        plt.plot(fx, marker="", lw=3)
+        ax.plot(fx, marker="", lw=3)
 
-    plt.plot([0, len(Y_turbo)], [reward_ref, reward_ref], "k--", lw=3)
-    plt.xlabel("Function value", fontsize=18)
-    plt.xlabel("Number of evaluations", fontsize=18)
-    plt.title("Wind Environment", fontsize=24)
-    plt.xlim([0, len(Y_turbo)])
+    ax.plot([0, len(Y_turbo)], [reward_ref, reward_ref], "k--", lw=3)
+    ax.set_ylabel("Function value", fontsize=18)
+    ax.set_xlabel("Number of evaluations", fontsize=18)
+    ax.set_title("Wind Environment", fontsize=24)
+    ax.set_xlim([0, len(Y_turbo)])
     #plt.ylim([-15, 600])
 
-    plt.grid(True)
-    plt.tight_layout()
-    plt.legend(
+    ax.grid(True)
+    fig.tight_layout()
+    lgd = ax.legend(
         names + ["Straight Path"],
         loc="lower center",
         bbox_to_anchor=(0, -0.08, 1, 1),
@@ -180,8 +150,28 @@ constraint_kwargs = {'reservoir_info' : [False, None]}):
         ncol=4,
         fontsize=16,
     )
-    plt.savefig('methods.png')
+    plt.savefig(dir_name+'/methods.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
     plt.close(fig)
 
+    # Visualization best paths
+    ## Turbo
+    thetas = [unnormalize(X_turbo[int(torch.max(Y_turbo, 0)[1])], bounds) , unnormalize(X_ei[int(torch.max(Y_ei, 0)[1])], bounds), unnormalize(X_Sobol[int(torch.max(Y_Sobol, 0)[1])], bounds)]
+    for name, theta in zip(names, thetas):
+        print(black_box_function(env, theta, n_eval_episodes))
+        Cumulative_reward = 0
+        s = env.reset()
+        for _ in range(1000):
+            s = torch.from_numpy(s).reshape(3,1)
+            s = s.type('torch.DoubleTensor')
+            action = policy_BO(theta, s)
+            s, reward, done, info = env.step(action)
+            Cumulative_reward += reward
+            if done:
+                break
+        ##Plot trajectory
+        fig, axs = env.plot_trajectory(Cumulative_reward, ref_trajectory_x = env_ref.trajectory_x, ref_trajectory_y = env_ref.trajectory_y, ref_energy = env_ref.energy,  ref_time = env_ref.time)
+        plt.savefig(dir_name+'/trajectory_'+name+'.png')
+        plt.close(fig)
 
     del env
+    del env_ref
