@@ -362,7 +362,7 @@ def generate_batch(
 
     if acqf == "ts":
         dim = X.shape[-1]
-        sobol = SobolEngine(dim, scramble=True)
+        sobol = SobolEngine(dim, scramble=True) ### RANDOM ###
         pert = sobol.draw(n_candidates).to(dtype=dtype, device=device)
         pert = tr_lb + (tr_ub - tr_lb) * pert
 
@@ -371,7 +371,7 @@ def generate_batch(
         mask = (
             torch.rand(n_candidates, dim, dtype=dtype, device=device)
             <= prob_perturb
-        )
+        )  ### RANDOM ###
         ind = torch.where(mask.sum(dim=1) == 0)[0]
         mask[ind, torch.randint(0, dim - 1, size=(len(ind),), device=device)] = 1
 
@@ -380,7 +380,7 @@ def generate_batch(
         X_cand[mask] = pert[mask]
 
         # Sample on the candidate points
-        thompson_sampling = MaxPosteriorSampling(model=model, replacement=False)
+        thompson_sampling = MaxPosteriorSampling(model=model, replacement=False)   ### RANDOM ### ??
         with torch.no_grad():  # We don't need gradients when using TS
             X_next = thompson_sampling(X_cand, num_samples=batch_size)
 
