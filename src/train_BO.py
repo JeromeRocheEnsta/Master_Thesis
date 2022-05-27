@@ -157,7 +157,7 @@ constraint_kwargs = {'reservoir_info' : [False, None]}):
 
     names = ["TuRBO-1", "EI", "Sobol"]
     runs = [Y_turbo, Y_ei, Y_Sobol]
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(8, 10))
 
     for name, run in zip(names, runs):
         fx = np.maximum.accumulate(run.cpu())

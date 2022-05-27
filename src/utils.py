@@ -25,6 +25,7 @@ from gpytorch.kernels import MaternKernel, ScaleKernel
 from gpytorch.likelihoods import GaussianLikelihood
 from gpytorch.mlls import ExactMarginalLogLikelihood
 from gpytorch.priors import HorseshoePrior
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 dtype = torch.double
 SMOKE_TEST = os.environ.get("SMOKE_TEST")
@@ -244,9 +245,13 @@ def get_data(seeds, scale = None, bonus = None):
     else:
         return(timesteps, mean_reward, mean_length, mean_energy, ref_reward, ref_length, ref_energy)
 
+
+##################################
 ##################################
 ## Function for Bayesian Opt RL ##
 ################################## 
+##################################
+
 
 def policy_BO(theta, s):
     '''
@@ -270,7 +275,6 @@ def black_box_function(env, theta, n_eval_episodes):
             s = torch.from_numpy(state).reshape(3,1)
             s = s.type('torch.DoubleTensor')
             action = policy_BO(theta, s)
-            print(action)
 
             state, reward, done, info = env.step(action)
             ep_reward += reward
@@ -398,7 +402,7 @@ def TuRBO(env, dim, n_init, bounds, n_eval_episodes, batch_size):
     Y_turbo = torch.tensor(
         [eval_objective(env, x, bounds, n_eval_episodes) for x in X_turbo], dtype=dtype, device=device
     ).unsqueeze(-1)
-    print(X_turbo, Y_turbo)
+    print(X_turbo, Y_turbo, bounds)
 
     state = TurboState(dim, batch_size=batch_size)
 
@@ -451,7 +455,7 @@ def TuRBO(env, dim, n_init, bounds, n_eval_episodes, batch_size):
             f"{len(X_turbo)}) Best value: {state.best_value:.2e}, TR length: {state.length:.2e}"
         )
 
-        return X_turbo, Y_turbo
+    return X_turbo, Y_turbo
 
 def qEI(env, dim, bounds, n_eval_episodes, n_init, batch_size, n_iter):
     X_ei = get_initial_points(dim, n_init)
@@ -494,7 +498,7 @@ def qEI(env, dim, bounds, n_eval_episodes, n_init, batch_size, n_iter):
         # Print current status
         print(f"{len(X_ei)}) Best value: {Y_ei.max().item():.2e}")
 
-        return X_ei, Y_ei
+    return X_ei, Y_ei
 
 def Sobol(env, dim, bounds, n_eval_episodes, n_iter):
     X_Sobol = SobolEngine(dim, scramble=True, seed=0).draw(n_iter).to(dtype=dtype, device=device)

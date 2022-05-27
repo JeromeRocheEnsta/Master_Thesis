@@ -25,9 +25,9 @@ if __name__ == "__main__":
     
     model_kwargs = {
         'gamma' : 0.99,
-        'n_eval_episodes' : 10,
+        'n_eval_episodes' : 1,
         'dim' : 3,
-        'bounds' : torch.tensor([ [-1./360, -0.001, -0.001] , [-1./360, -0.001, -0.001] ], dtype = torch.float64),
+        'bounds' : torch.tensor([ [-1./360, -0.001, -0.001] , [1./360, 0.001, 0.001] ], dtype = torch.float64),
         'batch_size' : 3
     } 
     
