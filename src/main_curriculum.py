@@ -41,7 +41,7 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000}
+    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000}
 
     environment_kwargs = {
         'propulsion' : 'variable',
