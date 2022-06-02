@@ -44,7 +44,7 @@ def train(log_kwargs = {'save' : False, 'n_eval_episodes_callback' : 5, 'eval_fr
 environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900), 'target' : (800, 200),
 'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0},
 model_kwargs = {'gamma' : 0.99, 'policy_kwargs' : None, 'train_timesteps' : 150000, 'method' : 'PPO','n_steps' : 2048,
-'batch_size' : 64},
+'batch_size' : 64, 'use_sde' : False},
 reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
 constraint_kwargs = {'reservoir_info' : [False, None]},
 seed = 1):
@@ -69,6 +69,7 @@ seed = 1):
 
     #model_kwargs
     gamma = model_kwargs['gamma']
+    use_sde = model_kwargs['use_sde'] if model_kwargs.get('use_sde') else False
     policy_kwargs = model_kwargs.get('policy_kwargs')
     if model_kwargs.get('Curriculum') == None:
         train_timesteps = model_kwargs['train_timesteps']
@@ -126,7 +127,7 @@ seed = 1):
         env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
         callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callaback)
         if(method == 'PPO'):
-            model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
+            model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde)
         else:
             raise Exception("This method is not available")
         print('Begin training with seed {}'.format(seed))
@@ -136,7 +137,7 @@ seed = 1):
         constraint = Curriculum['constraint']
         learning_rate = Curriculum['learning_rate']
         ts = Curriculum['ts']
-        env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+        env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, use_sde = use_sde)
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
         callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callaback)
         for i in range(len(constraint)):

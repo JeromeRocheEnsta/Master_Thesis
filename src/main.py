@@ -27,7 +27,8 @@ if __name__ == "__main__":
         'train_timesteps' : 1000,
         'method' : 'PPO',
         'n_steps' : 2048,
-        'batch_size' : 64
+        'batch_size' : 64,
+        'use_sde' : True
     }
 
 
