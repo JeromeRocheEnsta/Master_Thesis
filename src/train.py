@@ -54,7 +54,7 @@ seed = 1):
     
     # log_kwargs
     save = log_kwargs['save']
-    n_eval_episodes_callaback = 5 if log_kwargs.get('n_eval_episodes_callaback') == None else log_kwargs['n_eval_episodes_callaback']
+    n_eval_episodes_callback = 5 if log_kwargs.get('n_eval_episodes_callback') == None else log_kwargs['n_eval_episodes_callback']
     eval_freq = log_kwargs['eval_freq'] if log_kwargs.get('eval_freq') != None else 5000
 
     #environment_kwargs
@@ -125,7 +125,7 @@ seed = 1):
     # train agent
     if Curriculum == None:
         env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
-        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callaback)
+        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
         if(method == 'PPO'):
             model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde)
         else:
@@ -139,7 +139,7 @@ seed = 1):
         ts = Curriculum['ts']
         env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, use_sde = use_sde)
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
-        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callaback)
+        callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
         for i in range(len(constraint)):
             env.reservoir_use = True
             env.reservoir_capacity = constraint[i]
