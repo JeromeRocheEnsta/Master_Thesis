@@ -55,7 +55,6 @@ seed = 1):
     # log_kwargs
     save = log_kwargs['save']
     n_eval_episodes_callback = 5 if log_kwargs.get('n_eval_episodes_callback') == None else log_kwargs['n_eval_episodes_callback']
-    print(n_eval_episodes_callback)
     eval_freq = log_kwargs['eval_freq'] if log_kwargs.get('eval_freq') != None else 5000
 
     #environment_kwargs
