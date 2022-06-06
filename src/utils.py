@@ -113,7 +113,6 @@ def plot_wind_field(Wind, start, target):
 def get_discrete_maps(wind_info):
     discrete_maps = [[], []]
     div = len(wind_info)
-    print(div)
     for i in range (div*div):
         row = i//div
         col =  i%div
