@@ -8,7 +8,7 @@ if __name__ == "__main__":
     ### Control interface ###
     #########################
 
-    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000}
+    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000}
 
     environment_kwargs = {
         'propulsion' : 'variable',
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 3,
+        'reward_number' : 1,
         'scale' : 0.01,
         'bonus': 10
     }
@@ -42,8 +42,8 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
-    #seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    seeds = [1, 2]
+    seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    #seeds = [1]
     
     
 

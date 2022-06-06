@@ -5,7 +5,7 @@ def KBF(X, Y):
     K = np.zeros((len(X), len(Y)))
     for i in range(len(X)):
         for j in range(len(Y)):
-            K[i][j] = np.exp(-((X[i][0] - Y[j][0])**2 + (X[i][1] - Y[j][1])**2)/(2*500**2))
+            K[i][j] = np.exp(-((X[i][0] - Y[j][0])**2 + (X[i][1] - Y[j][1])**2)/(2*50**2))
     return K
 
 def mean(map):

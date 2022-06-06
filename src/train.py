@@ -96,7 +96,7 @@ seed = 1):
         
 
     # Crete WindMap Object (Wind Field modelized with a GP)
-    discrete_maps = get_discrete_maps(wind_info)
+    discrete_maps = get_discrete_maps(wind_info_3)
     A = WindMap(discrete_maps)
 
     # Save Visualization of the wind field
