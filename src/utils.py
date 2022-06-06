@@ -9,6 +9,7 @@ import os
 import math
 from dataclasses import dataclass
 
+
 import torch
 from botorch.acquisition import qExpectedImprovement
 from botorch.fit import fit_gpytorch_model
@@ -268,12 +269,16 @@ def get_data(seeds, scale = None, bonus = None):
 ##################################
 
 
-def policy_BO(theta, s):
+def policy_BO(theta, s, deterministic = True, sigma = 0.05):
     '''
     input : two torch.tensor respectively the policy parameters and the state
     output : action
     '''
-    return np.tanh(float(torch.matmul(theta, s)))
+    if deterministic:
+        return np.tanh(float(torch.matmul(theta, s)))
+    else:
+        epsilon = np.random.normal(0, sigma)
+        return np.tanh(float(torch.matmul(theta, s))) + epsilon
 
 
 def black_box_function(env, theta, n_eval_episodes):
@@ -289,6 +294,7 @@ def black_box_function(env, theta, n_eval_episodes):
 
             s = torch.from_numpy(state).reshape(3,1)
             s = s.type('torch.DoubleTensor')
+            theta = theta.type('torch.DoubleTensor')
             action = policy_BO(theta, s)
 
             state, reward, done, info = env.step(action)

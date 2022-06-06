@@ -41,13 +41,14 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
-    seed = 0
+    seed = 77
 
     ########################################
     ### Run Train for all configurations ###
     ########################################
     name = 'BO_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['n_eval_episodes'])
-    os.mkdir(name)
+    if not os.path.exists(name):
+        os.mkdir(name)
     os.chdir(name)
 
     train(log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed)
