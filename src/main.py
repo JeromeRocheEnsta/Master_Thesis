@@ -22,13 +22,13 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 1,
+        'gamma' : 0.9,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
         'train_timesteps' : 200000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64,
-        'use_sde' : True
+        'use_sde' : False
     }
 
 
