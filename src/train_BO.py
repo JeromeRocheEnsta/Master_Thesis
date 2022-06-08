@@ -90,7 +90,7 @@ seed = 0):
         os.mkdir(dir_name)
 
     # Crete WindMap Object (Wind Field modelized with a GP)
-    discrete_maps = get_discrete_maps(wind_info)
+    discrete_maps = get_discrete_maps(wind_info_3)
     A = WindMap(discrete_maps)
     # Save Visualization of the wind field
     fig = plot_wind_field(A, start, target)
