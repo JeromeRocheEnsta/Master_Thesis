@@ -50,6 +50,7 @@ model_kwargs = {'gamma' : 0.99, 'n_eval_episodes' : 1000, 'dim' : 4,
 reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
 constraint_kwargs = {'reservoir_info' : [False, None]},
 seed = 0):
+    print('START TRAINING WITH SEED = '+str(seed))
     ### Preprocess args
     
     torch.manual_seed(seed)
@@ -157,7 +158,6 @@ seed = 0):
     ## Turbo
     thetas = [unnormalize(X_turbo[int(torch.max(Y_turbo, 0)[1])], bounds) , unnormalize(X_ei[int(torch.max(Y_ei, 0)[1])], bounds), unnormalize(X_Sobol[int(torch.max(Y_Sobol, 0)[1])], bounds)]
     for name, theta in zip(names, thetas):
-        print(black_box_function(env, theta, n_eval_episodes))
         Cumulative_reward = 0
         s = env.reset()
         for _ in range(1000):
