@@ -41,7 +41,7 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
-    seed = 77
+    seeds = [77]
 
     ########################################
     ### Run Train for all configurations ###
@@ -51,7 +51,14 @@ if __name__ == "__main__":
         os.mkdir(name)
     os.chdir(name)
 
-    train(log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed)
+    processes = [multiprocessing.Process(target = train, args = [log_kwargs, environment_kwargs, model_kwargs, reward_kwargs, constraint_kwargs, seed]) for seed in seeds]
+
+    for process in processes:
+        process.start()
+    for process in processes:
+        process.join()
+
+        
 
     os.chdir('../')
 
