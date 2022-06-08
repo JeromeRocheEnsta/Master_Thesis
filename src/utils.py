@@ -423,7 +423,6 @@ def TuRBO(env, dim, n_init, bounds, n_eval_episodes, batch_size):
     Y_turbo = torch.tensor(
         [eval_objective(env, x, bounds, n_eval_episodes) for x in X_turbo], dtype=dtype, device=device
     ).unsqueeze(-1)
-    print(X_turbo, Y_turbo, bounds)
 
     state = TurboState(dim, batch_size=batch_size)
 
