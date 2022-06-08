@@ -55,7 +55,7 @@ bonus = 10
 reservoir_info = [False, None]
 
 # Crete WindMap Object (Wind Field modelized with a GP)
-discrete_maps = get_discrete_maps(wind_info)
+discrete_maps = get_discrete_maps(wind_info_3)
 A = WindMap(discrete_maps)
 
 env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
