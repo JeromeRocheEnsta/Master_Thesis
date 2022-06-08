@@ -176,19 +176,19 @@ seed = 0):
     ## Write infos
     file_turbo = open(dir_name+'/turbo.txt', 'w')
     for i in range(len(X_turbo)):
-        file_turbo.write('{} {}'.format(X_turbo[i], Y_turbo[i]))
+        file_turbo.write('{} {}\n'.format(X_turbo[i], Y_turbo[i]))
     file_turbo.close()
 
     file_EI = open(dir_name+'/EI.txt', 'w')
     for i in range(len(X_ei)):
-        file_EI.write('{} {}'.format(X_ei[i], Y_ei[i]))
+        file_EI.write('{} {}\n'.format(X_ei[i], Y_ei[i]))
     file_EI.close()
 
     file_Sobol = open(dir_name+'/Sobol.txt', 'w')
     for i in range(len(X_Sobol)):
-        file_Sobol.write('{} {}'.format(X_Sobol[i], Y_Sobol[i]))
+        file_Sobol.write('{} {}\n'.format(X_Sobol[i], Y_Sobol[i]))
     file_Sobol.close()
 
-    
+
     del env
     del env_ref
