@@ -61,19 +61,22 @@ A = WindMap(discrete_maps)
 env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
 
 grid = np.linspace(-1, 1, 30)
-data = [[], [], [], []]
+
+file = open('objective_function.txt', 'w')
+
 for x1 in grid:
     for x2 in grid:
         for x3 in grid:
             theta = torch.Tensor([x1, x2, x3])
             performance = black_box_function(env, theta, 1)
-            data[0].append(x1)
-            data[1].append(x2)
-            data[2].append(x3)
-            data[3].append(performance)
+            file.write('{} {} {} {}\n'.format(x1, x2, x3, performance))
 
+file.close()
+
+"""
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 img = ax.scatter(data[0], data[1], data[2], c=data[3], cmap='coolwarm')
 fig.colorbar(img)
 plt.savefig('objective_function.png')
+"""
