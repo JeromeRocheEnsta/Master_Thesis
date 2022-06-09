@@ -282,6 +282,7 @@ def policy_BO(theta, s, deterministic = True, sigma = 0.05):
 
 
 def black_box_function(env, theta, n_eval_episodes):
+    theta = theta.type('torch.DoubleTensor')
     Expected_reward = 0
     for i in range(n_eval_episodes):
         state = env.reset()
@@ -294,7 +295,7 @@ def black_box_function(env, theta, n_eval_episodes):
 
             s = torch.from_numpy(state).reshape(3,1)
             s = s.type('torch.DoubleTensor')
-            theta = theta.type('torch.DoubleTensor')
+            
             action = policy_BO(theta, s)
 
             state, reward, done, info = env.step(action)
