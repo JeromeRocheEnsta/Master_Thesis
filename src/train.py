@@ -42,7 +42,7 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
 def train(log_kwargs = {'save' : False, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000},
 environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900), 'target' : (800, 200),
-'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0},
+'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0, 'wind_info' : wind_info_1},
 model_kwargs = {'gamma' : 0.99, 'policy_kwargs' : None, 'train_timesteps' : 150000, 'method' : 'PPO','n_steps' : 2048,
 'batch_size' : 64, 'use_sde' : False},
 reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
@@ -66,6 +66,7 @@ seed = 1):
     radius = environment_kwargs['radius']
     dt = environment_kwargs['dt']
     initial_angle = environment_kwargs['initial_angle']
+    wind_info = environment_kwargs['wind_info']
 
     #model_kwargs
     gamma = model_kwargs['gamma']
@@ -96,7 +97,7 @@ seed = 1):
         
 
     # Crete WindMap Object (Wind Field modelized with a GP)
-    discrete_maps = get_discrete_maps(wind_info_3)
+    discrete_maps = get_discrete_maps(wind_info)
     A = WindMap(discrete_maps)
 
     # Save Visualization of the wind field

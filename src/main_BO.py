@@ -2,7 +2,7 @@ from train_BO import train
 import os
 import multiprocessing
 import torch
-
+from utils import *
 
 if __name__ == "__main__":
     #########################
@@ -20,7 +20,8 @@ if __name__ == "__main__":
         'target' : (800, 200),
         'radius' : 30,
         'dt' : 4,
-        'initial_angle' : 0
+        'initial_angle' : 0,
+        'wind_info' : wind_info_3
     }
     
     model_kwargs = {

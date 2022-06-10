@@ -43,7 +43,7 @@ SMOKE_TEST = os.environ.get("SMOKE_TEST")
 
 def train( log_kwargs = {'save' : False},
 environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900),
-'target' : (800, 200), 'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0},
+'target' : (800, 200), 'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0, 'wind_info' : wind_info_1},
 model_kwargs = {'gamma' : 0.99, 'n_eval_episodes' : 1000, 'dim' : 4,
 'bounds' : torch.tensor([ [-1, -1, -1, -1] , [1, 1, 1, 1] ], dtype = torch.float64),
 'batch_size' : 4}, #method within qEI, Sobol, TuRBO
@@ -68,6 +68,7 @@ seed = 0):
     radius = environment_kwargs['radius']
     dt = environment_kwargs['dt']
     initial_angle = environment_kwargs['initial_angle']
+    wind_map = environment_kwargs['wind_map']
 
     # model_kwargs
     gamma = model_kwargs['gamma']
@@ -90,7 +91,7 @@ seed = 0):
         os.mkdir(dir_name)
 
     # Crete WindMap Object (Wind Field modelized with a GP)
-    discrete_maps = get_discrete_maps(wind_info_3)
+    discrete_maps = get_discrete_maps(wind_info)
     A = WindMap(discrete_maps)
     # Save Visualization of the wind field
     fig = plot_wind_field(A, start, target)

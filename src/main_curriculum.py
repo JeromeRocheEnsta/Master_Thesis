@@ -2,6 +2,7 @@ from train import train
 import os
 import multiprocessing
 import torch as th
+from utils import *
 
 ## Reward 1
 """
@@ -51,7 +52,8 @@ if __name__ == "__main__":
         'target' : (800, 200),
         'radius' : 30,
         'dt' : 4,
-        'initial_angle' : 0
+        'initial_angle' : 0,
+        'wind_info' : wind_info_1
     }
     
     model_kwargs = {
