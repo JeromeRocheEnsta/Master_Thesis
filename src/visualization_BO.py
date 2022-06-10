@@ -52,6 +52,8 @@ reward_number = 1
 scale = 0.01
 bonus = 10
 
+bounds = torch.tensor([ [-1./360, -0.001, -0.001] , [1./360, 0.001, 0.001] ], dtype = torch.float64)
+
 reservoir_info = [False, None]
 
 # Crete WindMap Object (Wind Field modelized with a GP)
@@ -68,7 +70,7 @@ for x1 in grid:
     for x2 in grid:
         for x3 in grid:
             theta = torch.Tensor([x1, x2, x3])
-            performance = black_box_function(env, theta, 1)
+            performance = eval_objective(env, theta, bounds, 1)
             file.write('{} {} {} {}\n'.format(x1, x2, x3, performance))
 
 file.close()
