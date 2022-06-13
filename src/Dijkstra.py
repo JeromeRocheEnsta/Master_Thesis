@@ -1,4 +1,5 @@
 from dijkstar import Graph, find_path
+import matplotlib.pyplot as plt
 import numpy as np
 from utils import *
 from env.utils import energy
@@ -14,8 +15,8 @@ from env.wind.wind_map import *
 start = (100, 900)
 target = (800, 200)
 
-mu = 20 / 3.6 # m/s
-dt = 4
+mu = 20 # km/h
+dt = 0.5 # s
 
 def number_to_coordinate(x, m):
     column = x % m
@@ -26,7 +27,7 @@ def number_to_coordinate(x, m):
 
 def cost_function(wind_map, x, m, info):
     x1, y1 = number_to_coordinate(x, m)
-    magnitude = wind_map._get_magnitude([(x1, y1)])
+    magnitude = wind_map._get_magnitude([(x1, y1)]) # km/h
     direction = wind_map._get_direction([(x1, y1)])
     if info == 'right':
         angle = 0
@@ -37,7 +38,7 @@ def cost_function(wind_map, x, m, info):
     elif info == 'bottom':
         angle = 270
     v_prop = np.sqrt(( - magnitude * np.cos(direction * np.pi / 180) + mu *np.cos(angle* np.pi / 180))**2 + (( - magnitude * np.sin(direction * np.pi / 180) + mu *np.sin(angle* np.pi / 180))**2))
-    print(magnitude, direction, v_prop)
+    #print(magnitude, direction, v_prop)
     return energy(v_prop, mu)
 
 def add_top(wind_map, x, m):
@@ -62,10 +63,10 @@ def add_left(wind_map, x, m):
 
 if __name__ == "__main__":
     ## Wind map
-    discrete_maps = get_discrete_maps(wind_info_1)
+    discrete_maps = get_discrete_maps(wind_info_3)
     wind_map = WindMap(discrete_maps)
     ## Find m
-    m = int(1000/(mu * dt)) # to ensure relative velocity of mu * dt
+    m = int(1000/(mu / 3.6 * dt)) # to ensure relative velocity of mu * dt || Be carefull we want second and mu is in km/h
     
     ### Create Graph
     graph = Graph()
@@ -147,6 +148,18 @@ if __name__ == "__main__":
     print(column, row)
 
     best_path = find_path(graph, idx_start, idx_target)
-    print(best_path)
+    #print(best_path)
+    path = best_path[0]
+    path_x = []
+    path_y = []
+    for i in range(len(path)):
+        x, y = number_to_coordinate(path[i], m)
+        path_x.append(float(x))
+        path_y.append(float(y))
+    fig = plot_wind_field(wind_map, start, target)
+    print(len(path_x), len(path_y))
+    plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3)
+    plt.show()
+    plt.close()
 
     ## Post processing
