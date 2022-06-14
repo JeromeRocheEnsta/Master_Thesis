@@ -57,10 +57,11 @@ bounds = torch.tensor([ [-1./360, -0.001, -0.001] , [1./360, 0.001, 0.001] ], dt
 reservoir_info = [False, None]
 
 # Crete WindMap Object (Wind Field modelized with a GP)
-discrete_maps = get_discrete_maps(wind_info_3)
-A = WindMap(discrete_maps)
+wind_info = wind_info_3
+discrete_maps = get_discrete_maps(wind_info['info'])
+A = WindMap(discrete_maps, wind_info['lengthscale'])
 
-env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_info['lengthscale'], alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
 
 grid = np.linspace(-1, 1, 50)
 

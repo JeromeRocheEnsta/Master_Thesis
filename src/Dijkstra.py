@@ -63,8 +63,8 @@ def add_left(wind_map, x, m):
 
 if __name__ == "__main__":
     ## Wind map
-    discrete_maps = get_discrete_maps(wind_info_3)
-    wind_map = WindMap(discrete_maps)
+    discrete_maps = get_discrete_maps(wind_info_3['info'])
+    wind_map = WindMap(discrete_maps, wind_info_3['lengthscale'])
     ## Find m
     m = int(1000/(mu / 3.6 * dt)) # to ensure relative velocity of mu * dt || Be carefull we want second and mu is in km/h
     

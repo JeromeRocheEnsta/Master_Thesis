@@ -10,7 +10,7 @@ from env.utils import reward_1, reward_2, reward_sparse, energy
 
 
 class WindEnv_gym(gym.Env):
-    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None]):
+    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None]):
         super(WindEnv_gym, self).__init__()
 
 
@@ -46,7 +46,7 @@ class WindEnv_gym(gym.Env):
 
 
         self.propulsion_velocity= mu ## Velocity of the propulsion system
-        self.wind_map = WindMap(wind_maps) ## Create the continuous wind_map
+        self.wind_map = WindMap(wind_maps, wind_lengthscale) ## Create the continuous wind_map
 
         self.alpha = alpha # action range (angle)
         

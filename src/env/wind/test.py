@@ -33,7 +33,7 @@ print('Test mean: OK') if test else print('Test mean: NOT OK')
 ## get_params
 
 discrete_maps =[ [(0, 0, 0), (1, 0, 2), (3, 0, 1)], [(0, 0, 0)]  ]
-A = WindMap(discrete_maps)
+A = WindMap(discrete_maps, 500)
 
 params = A.magnitude_params
 true_params = [1, np.dot( np.linalg.inv([[1, np.exp(-0.5), np.exp(-9/2)],[np.exp(-0.5), 1, np.exp(-4/2)],[np.exp(-9/2), np.exp(-4/2), 1]]), np.array([-1, 1, 0], dtype= float) )]
@@ -77,7 +77,7 @@ plt.show()
 
 ##plot(2D)
 discrete_maps = [[(0, 0, 5), (500, 0, 10), (1000, 0, 15), (0, 500, 5), (500, 500, 5), (1000, 500, 10), (0, 1000, 5), (500, 1000, 5), (1000, 1000, 5)], [(0,0,0)]]
-A = WindMap(discrete_maps)
+A = WindMap(discrete_maps, 500)
 
 localisation = []
 X = []

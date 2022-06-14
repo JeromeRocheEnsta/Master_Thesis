@@ -66,7 +66,9 @@ seed = 1):
     radius = environment_kwargs['radius']
     dt = environment_kwargs['dt']
     initial_angle = environment_kwargs['initial_angle']
-    wind_info = environment_kwargs['wind_info']
+
+    wind_info = environment_kwargs['wind_info']['info']
+    wind_lengthscale = environment_kwargs['wind_info']['lengthscale']
 
     #model_kwargs
     gamma = model_kwargs['gamma']
@@ -98,7 +100,7 @@ seed = 1):
 
     # Crete WindMap Object (Wind Field modelized with a GP)
     discrete_maps = get_discrete_maps(wind_info)
-    A = WindMap(discrete_maps)
+    A = WindMap(discrete_maps, wind_lengthscale)
 
     # Save Visualization of the wind field
     fig = plot_wind_field(A, start, target)
@@ -108,7 +110,7 @@ seed = 1):
 
     # reference path
     straight_angle = get_straight_angle(start, target)
-    env_ref = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale)
+    env_ref = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale)
     env_ref.reset()
     reward_ref = 0
     while env_ref._target() == False:
@@ -125,7 +127,7 @@ seed = 1):
 
     # train agent
     if Curriculum == None:
-        env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
         callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
         if(method == 'PPO'):
             model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde, sde_sample_freq = 100)
@@ -138,7 +140,7 @@ seed = 1):
         constraint = Curriculum['constraint']
         learning_rate = Curriculum['learning_rate']
         ts = Curriculum['ts']
-        env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, use_sde = use_sde)
+        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, use_sde = use_sde)
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size)
         callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
         for i in range(len(constraint)):

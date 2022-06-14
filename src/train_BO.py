@@ -68,7 +68,8 @@ seed = 0):
     radius = environment_kwargs['radius']
     dt = environment_kwargs['dt']
     initial_angle = environment_kwargs['initial_angle']
-    wind_map = environment_kwargs['wind_map']
+    wind_info = environment_kwargs['wind_info']['info']
+    wind_lengthscale = environment_kwargs['wind_info']['lengthscale']
 
     # model_kwargs
     gamma = model_kwargs['gamma']
@@ -92,7 +93,7 @@ seed = 0):
 
     # Crete WindMap Object (Wind Field modelized with a GP)
     discrete_maps = get_discrete_maps(wind_info)
-    A = WindMap(discrete_maps)
+    A = WindMap(discrete_maps, wind_lengthscale)
     # Save Visualization of the wind field
     fig = plot_wind_field(A, start, target)
     if save:
@@ -102,7 +103,7 @@ seed = 0):
 
     # reference path
     straight_angle = get_straight_angle(start, target)
-    env_ref = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale)
+    env_ref = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale)
     env_ref.reset()
     reward_ref = 0
     while env_ref._target() == False:
@@ -116,7 +117,7 @@ seed = 0):
 
 
     #BO for RL 
-    env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+    env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
 
     X_turbo, Y_turbo = TuRBO(env, dim, n_init, bounds, n_eval_episodes, batch_size)
     n_iter = len(X_turbo)

@@ -40,9 +40,9 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
     return func
 
-
-discrete_maps = get_discrete_maps(wind_info_2)
-A = WindMap(discrete_maps)
+wind_info = wind_info_2
+discrete_maps = get_discrete_maps(wind_info['info'])
+A = WindMap(discrete_maps, wind_info['lengthscale'])
 
 
 start = (100, 900)
@@ -60,7 +60,7 @@ dt = 4
 gamma = 0.9
 train_timesteps = 1000
 
-env = WindEnv_gym(wind_maps = discrete_maps, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
+env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_info['lengthscale'], alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
 
 check_env(env)
 
