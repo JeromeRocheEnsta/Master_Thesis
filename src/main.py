@@ -52,6 +52,14 @@ if __name__ == "__main__":
     ########################################
     ### Run Train for all configurations ###
     ########################################
+    if not os.path.exists('log_files'):
+        os.mkdir('log_files')
+    os.chdir('log_files')
+
+    if not os.path.exists('wind_map_'+str(environment_kwargs['wind_info']['number'])):
+        os.mkdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
+    os.chdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
+
     name = 'png_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
                         
     os.mkdir(name)
@@ -65,5 +73,7 @@ if __name__ == "__main__":
     for process in processes:
         process.join()
 
+    os.chdir('../')
+    os.chdir('../')
     os.chdir('../')
 

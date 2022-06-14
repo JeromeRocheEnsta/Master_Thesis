@@ -63,10 +63,26 @@ def add_left(wind_map, x, m):
 
 if __name__ == "__main__":
     ## Wind map
-    discrete_maps = get_discrete_maps(wind_info_3['info'])
-    wind_map = WindMap(discrete_maps, wind_info_3['lengthscale'])
+    wind_info = wind_info_3
+    discrete_maps = get_discrete_maps(wind_info['info'])
+    wind_map = WindMap(discrete_maps, wind_info['lengthscale'])
+    
     ## Find m
     m = int(1000/(mu / 3.6 * dt)) # to ensure relative velocity of mu * dt || Be carefull we want second and mu is in km/h
+
+    ## Log Files
+    if not os.path.exists('log_files'):
+        os.mkdir('log_files')
+    os.chdir('log_files')
+
+    if not os.path.exists('wind_map_'+str(wind_info['number'])):
+        os.mkdir('wind_map_'+str(wind_info['number']))
+    os.chdir('wind_map_'+str(wind_info['number']))
+
+    if not os.path.exists('Djikstra_'+str(m)):
+        os.mkdir('Djikstra_'+str(m))
+    os.chdir('Djikstra_'+str(m))
+
     
     ### Create Graph
     graph = Graph()
@@ -161,5 +177,9 @@ if __name__ == "__main__":
     plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3)
     plt.show()
     plt.close()
+
+    os.chdir('../')
+    os.chdir('../')
+    os.chdir('../')
 
     ## Post processing

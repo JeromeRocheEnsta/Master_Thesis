@@ -58,6 +58,14 @@ if __name__ == "__main__":
     seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
     scales = [5000, 10000]
+
+    if not os.path.exists('log_files'):
+        os.mkdir('log_files')
+    os.chdir('log_files')
+
+    if not os.path.exists('wind_map_'+str(environment_kwargs['wind_info']['number'])):
+        os.mkdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
+    os.chdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
     
 
     if not os.path.exists('Exp_scale'):
@@ -90,4 +98,6 @@ if __name__ == "__main__":
             os.chdir('../')
     
     
+    os.chdir('../')
+    os.chdir('../')
     os.chdir('../')
