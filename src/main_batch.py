@@ -48,6 +48,14 @@ if __name__ == "__main__":
     n_steps = [1024, 2048, 4096, 8192]
     batch_size = [64, 128, 256]
 
+    if not os.path.exists('log_files'):
+        os.mkdir('log_files')
+    os.chdir('log_files')
+
+    if not os.path.exists('wind_map_'+str(environment_kwargs['wind_info']['number'])):
+        os.mkdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
+    os.chdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
+
     if not os.path.exists('Exp_batch'):
         os.mkdir('Exp_batch')
     os.chdir('Exp_batch')
@@ -79,4 +87,6 @@ if __name__ == "__main__":
             os.chdir('../')
                         
                         
+    os.chdir('../')
+    os.chdir('../')
     os.chdir('../')

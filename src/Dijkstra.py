@@ -16,7 +16,7 @@ start = (100, 900)
 target = (800, 200)
 
 mu = 20 # km/h
-dt = 0.5 # s
+dt = 4 # s
 
 def number_to_coordinate(x, m):
     column = x % m
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         path_y.append(float(y))
     fig = plot_wind_field(wind_map, start, target)
     print(len(path_x), len(path_y))
-    fig.suptitle('Energy consumed : '+str(total_cost), fontsize=16)
+    fig.suptitle('Energy consumed : '+str(round(float(total_cost), 2)), fontsize=16)
     plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3)
     plt.savefig('DjikstraPath.png')
 

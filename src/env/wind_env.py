@@ -10,9 +10,11 @@ from env.utils import reward_1, reward_2, reward_sparse, energy
 
 
 class WindEnv_gym(gym.Env):
-    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant', ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None]):
+    def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant',
+    ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None],
+    continuous = True):
         super(WindEnv_gym, self).__init__()
-
+        self.continuous = continuous
 
         ### Reservoir Info
         self.reservoir_use = reservoir_info[0]
@@ -23,7 +25,10 @@ class WindEnv_gym(gym.Env):
         ### Type of dynamic
         self.straight = straight
         self.propulsion = propulsion
-        self.ha = ha
+        if self.continuous:
+            self.ha = ha
+        else:
+            self.ha = 'next_state'
         self.scale = scale #Reward scaling
         self.bonus = bonus # bonus for reaching the goal
         self.magnitude_max = 20
@@ -70,7 +75,10 @@ class WindEnv_gym(gym.Env):
             
         # Define action and observation space
         # They must be gym.spaces objects
-        self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float)
+        if self.continuous:
+            self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float)
+        else:
+            self.action_space = spaces.Discrete(4)
         self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float), high = np.array([360., 1000., 1000.], dtype = np.float), shape = (3,), dtype = np.float)
 
     def _target(self):
@@ -185,8 +193,21 @@ class WindEnv_gym(gym.Env):
     def step(self, action):
         # Reset the state of the environment to an initial state
         previous_coordinate = self.state[1], self.state[2]
-        self.state[0] = self.state[0] if self.straight else self.state[0] + action * self.alpha
-        self.state[0] = self.state[0] % 360
+        if self.continuous:
+            self.state[0] = self.state[0] if self.straight else self.state[0] + action * self.alpha
+            self.state[0] = self.state[0] % 360
+        else:
+            if action == 0:
+                self.state[0] = 0
+            elif action == 1:
+                self.state[0] = 90
+            elif action == 2:
+                self.state[0] = 180
+            elif action == 3:
+                self.state[0] = 270
+            else:
+                raise Exception('The action is not possible (case : Discrete)')
+
         magnitude = float(self.wind_map._get_magnitude([(previous_coordinate[0], previous_coordinate[1])]))
         direction = float(self.wind_map._get_direction([(previous_coordinate[0], previous_coordinate[1])])) % 360
 

@@ -60,8 +60,7 @@ if __name__ == "__main__":
         os.mkdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
     os.chdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
 
-    name = 'png_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
-                        
+    name = 'png_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])              
     os.mkdir(name)
     os.chdir(name)
     #Multi Porcessing
