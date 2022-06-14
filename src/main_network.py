@@ -6,8 +6,8 @@ from utils import *
 
 Network = {
     1 : [dict(pi = [64,64], vf = [64,64])],
-    2 : [dict(pi = [100,50,25], vf = [100,50,25])],
-    3 : [dict(pi = [400, 300], vf = [400, 300])],
+    #2 : [dict(pi = [100,50,25], vf = [100,50,25])],
+    #3 : [dict(pi = [400, 300], vf = [400, 300])],
 }
 
 Activation  = {
@@ -31,8 +31,8 @@ if __name__ == "__main__":
         'radius' : 30,
         'dt' : 4,
         'initial_angle' : 0,
-        'wind_info' : wind_info_1,
-        'continuous' : True
+        'wind_info' : wind_info_3,
+        'continuous' : False
     }
     
     model_kwargs = {
