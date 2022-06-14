@@ -164,8 +164,8 @@ if __name__ == "__main__":
     print(column, row)
 
     best_path = find_path(graph, idx_start, idx_target)
-    #print(best_path)
     path = best_path[0]
+    total_cost = best_path[3]
     path_x = []
     path_y = []
     for i in range(len(path)):
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         path_y.append(float(y))
     fig = plot_wind_field(wind_map, start, target)
     print(len(path_x), len(path_y))
-    plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3)
+    plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3, main = 'Energy consumed : '+str(total_cost))
     plt.savefig('DjikstraPath.png')
 
     os.chdir('../')
