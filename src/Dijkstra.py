@@ -174,7 +174,8 @@ if __name__ == "__main__":
         path_y.append(float(y))
     fig = plot_wind_field(wind_map, start, target)
     print(len(path_x), len(path_y))
-    plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3, main = 'Energy consumed : '+str(total_cost))
+    fig.suptitle(''Energy consumed : '+str(total_cost)', fontsize=16)
+    plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3)
     plt.savefig('DjikstraPath.png')
 
     os.chdir('../')
