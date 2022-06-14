@@ -21,7 +21,8 @@ if __name__ == "__main__":
         'radius' : 30,
         'dt' : 4,
         'initial_angle' : 0,
-        'wind_info' : wind_info_3
+        'wind_info' : wind_info_3,
+        'continuous' : True
     }
     
     model_kwargs = {
