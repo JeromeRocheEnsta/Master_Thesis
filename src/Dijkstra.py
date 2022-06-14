@@ -175,8 +175,7 @@ if __name__ == "__main__":
     fig = plot_wind_field(wind_map, start, target)
     print(len(path_x), len(path_y))
     plt.plot(path_x, path_y, '-', color = 'black', linewidth = 3)
-    plt.show()
-    plt.close()
+    plt.savefig('DjikstraPath.png')
 
     os.chdir('../')
     os.chdir('../')
