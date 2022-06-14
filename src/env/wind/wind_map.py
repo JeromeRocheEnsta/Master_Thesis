@@ -20,9 +20,10 @@ def mean(map):
 class WindMap:
     def __init__(self, discrete_maps, lengthscale):
         self.discrete_maps = discrete_maps
+        self.lengthscale = lengthscale
         self.magnitude_params = self._get_magnitude_params()
         self.direction_params = self._get_direction_params()
-        self.lengthscale = lengthscale
+        
 
     def _get_magnitude_params(self):
         m = mean(self.discrete_maps[0])
