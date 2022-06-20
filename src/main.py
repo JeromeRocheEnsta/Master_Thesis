@@ -20,7 +20,7 @@ if __name__ == "__main__":
         'radius' : 30,
         'dt' : 4,
         'initial_angle' : 0,
-        'wind_info' : wind_info_1,
+        'wind_info' : wind_info_4,
         'continuous' : True
     }
     
@@ -45,8 +45,8 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
-    seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    #seeds = [1]
+    #seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    seeds = [1]
     
     
 
