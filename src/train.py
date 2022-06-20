@@ -67,7 +67,7 @@ seed = 1):
     dt = environment_kwargs['dt']
     initial_angle = environment_kwargs['initial_angle']
     continuous = environment_kwargs['continuous'] if environment_kwargs.get('continuous') else True
-    print(continuous, environment_kwargs['continuous'])
+    print(environment_kwargs['continuous'] if environment_kwargs.get('continuous') else True, environment_kwargs.get('continuous'))
 
     wind_info = environment_kwargs['wind_info']['info']
     wind_lengthscale = environment_kwargs['wind_info']['lengthscale']
