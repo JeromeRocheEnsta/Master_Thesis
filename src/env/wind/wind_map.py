@@ -39,8 +39,7 @@ class WindMap:
 
 
     def _get_direction_params(self):
-        #m = mean(self.discrete_maps[1])
-        m = 315
+        m = mean(self.discrete_maps[1])
         C = KBF(self.discrete_maps[1], self.discrete_maps[1], self.lengthscale)
         l = len(self.discrete_maps[1])
         normalization = np.zeros(l)
