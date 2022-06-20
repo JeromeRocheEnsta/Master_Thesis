@@ -16,7 +16,7 @@ start = (100, 900)
 target = (800, 200)
 
 mu = 20 # km/h
-dt = 4 # s
+dt = 0.5 # s
 
 def number_to_coordinate(x, m):
     column = x % m
