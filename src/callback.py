@@ -65,6 +65,11 @@ class TrackExpectedRewardCallback(BaseCallback):
             self.outputfile.write('{} {} {} {}\n'.format(self.timesteps[i], self.expected_rewards[i], self.expected_lengths[i], self.expected_energies[i]))
         self.outputfile.close()
 
+
+
+
+
+
 class TrackCurriculumCallback(BaseCallback):
     def __init__(self, eval_env, factor, eval_freq: int, log_dir: str, n_eval_episodes: int, verbose=1):
         super(TrackExpectedRewardCallback, self).__init__(verbose)
@@ -110,6 +115,14 @@ class TrackCurriculumCallback(BaseCallback):
         for i in range(len(self.timesteps)):
             self.outputfile.write('{} {} {} {} {}\n'.format(self.timesteps[i], self.expected_rewards[i], self.expected_lengths[i], self.expected_energies[i], self.constraint[i]))
         self.outputfile.close()
+
+
+
+
+
+
+
+
 
 class ExplorationSpaceCallback(BaseCallback):
     def __init__(self, eval_env, eval_freq: int,  n_eval_episodes: int, verbose=1):
