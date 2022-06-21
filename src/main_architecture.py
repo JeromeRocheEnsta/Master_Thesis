@@ -5,12 +5,12 @@ import torch as th
 from utils import *
 
 Network = {
-    # 1 : [dict(pi = [64,64], vf = [64,64])],
-    # 2 : [dict(pi = [32, 32], vf = [32, 32])],
-    # 3 : [dict(pi = [16, 16], vf = [16, 16])],
-    # 4 : [dict(pi = [8, 8], vf = [8, 8])],
-    # 5 : [dict(pi = [4, 4], vf = [4, 4])],
-    # 6 : [dict(pi = [8], vf = [8])],
+    1 : [dict(pi = [64,64], vf = [64,64])],
+    2 : [dict(pi = [32, 32], vf = [32, 32])],
+    3 : [dict(pi = [16, 16], vf = [16, 16])],
+    4 : [dict(pi = [8, 8], vf = [8, 8])],
+    5 : [dict(pi = [4, 4], vf = [4, 4])],
+    6 : [dict(pi = [8], vf = [8])],
     7 : [16, dict(pi = [16], vf = [16])],
     8 : [16, dict(vf = [16])],
     9 : [16, dict(pi = [16])],
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000}
+    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000}
 
     environment_kwargs = {
         'propulsion' : 'variable',
@@ -34,8 +34,8 @@ if __name__ == "__main__":
         'target' : (800, 200),
         'radius' : 30,
         'dt' : 4,
-        'initial_angle' : 0,
-        'wind_info' : wind_info_1,
+        'initial_angle' : 315,
+        'wind_info' : wind_info_4,
         'continuous' : True
     }
     
