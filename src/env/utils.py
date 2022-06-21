@@ -1,4 +1,5 @@
 from tracemalloc import is_tracing
+from matplotlib import scale
 import numpy as np
 
 
@@ -26,6 +27,12 @@ def reward_2(magnitude, magnitude_max, direction, position, target, is_target, b
                 angle += theta
                 
         return magnitude/magnitude_max * np.cos(angle * np.pi / 180) * scale
+
+def reward_4(energy, is_target, bonus = 10, scale = 1):
+    if is_target:
+        return bonus * scale
+    else:
+        return - energy * scale
     
 
 def reward_sparse(is_target, scale = 1):
