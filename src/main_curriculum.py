@@ -1,3 +1,4 @@
+from enum import auto
 from train import train
 import os
 import multiprocessing
@@ -35,6 +36,11 @@ Curriculum = {
         'constraint' : [30000, 20000, 10000, 5000, 4000, 3000, 2000, 1000],
         'learning_rate' : [0.0005, 0.0001, 0.00005, 0.00001, 0.00001, 0.00001, 0.00001, 0.000005],
         'ts' : [50000, 50000, 50000, 50000, 30000, 30000, 30000, 30000]
+    },
+    3 : {
+        'type' : auto,
+        'ts' : 200000,
+        'factor' : 1.5
     }
 }
 

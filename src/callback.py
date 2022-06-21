@@ -66,18 +66,21 @@ class TrackExpectedRewardCallback(BaseCallback):
         self.outputfile.close()
 
 class TrackCurriculumCallback(BaseCallback):
-    def __init__(self, eval_env, eval_freq: int, log_dir: str, n_eval_episodes: int, verbose=1):
+    def __init__(self, eval_env, factor, eval_freq: int, log_dir: str, n_eval_episodes: int, verbose=1):
         super(TrackExpectedRewardCallback, self).__init__(verbose)
+        
         self.eval_env = eval_env
         self.eval_freq = eval_freq
         self.log_dir = log_dir
         self.outputfile = None
         self.n_eval_episodes = n_eval_episodes
+        self.factor = factor 
 
         self.timesteps = []
         self.expected_rewards = []
         self.expected_lengths = []
         self.expected_energies = []
+        self.constraint = []
 
     def _on_training_start(self) -> None:
         """
@@ -93,8 +96,9 @@ class TrackCurriculumCallback(BaseCallback):
             self.expected_rewards.append(expected_reward)
             self.expected_lengths.append(expected_length)
             self.expected_energies.append(expected_energy)
-            
-            self.eval_env.reservoir_capacity = expected_energy
+            self.constraint.append(expected_energy * self.factor)
+            self.eval_env.reservoir_capacity = expected_energy * self.factor
+
 
         return True
 
@@ -104,7 +108,7 @@ class TrackCurriculumCallback(BaseCallback):
         """
         self.outputfile = open(self.log_dir + '/monitoring.txt', 'w')
         for i in range(len(self.timesteps)):
-            self.outputfile.write('{} {} {} {}\n'.format(self.timesteps[i], self.expected_rewards[i], self.expected_lengths[i], self.expected_energies[i]))
+            self.outputfile.write('{} {} {} {} {}\n'.format(self.timesteps[i], self.expected_rewards[i], self.expected_lengths[i], self.expected_energies[i], self.constraint[i]))
         self.outputfile.close()
 
 class ExplorationSpaceCallback(BaseCallback):

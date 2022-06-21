@@ -10,7 +10,7 @@ from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3 import PPO
 from typing import Callable
-from callback import TrackExpectedRewardCallback
+from callback import TrackCurriculumCallback, TrackExpectedRewardCallback
 
 gym.logger.set_level(40)
 
@@ -137,6 +137,15 @@ seed = 1):
         print('Begin training with seed {}'.format(seed))
         model.learn(total_timesteps= train_timesteps, callback = callback)
         print('End training with seed {}'.format(seed))
+    elif Curriculum['type'] == 'auto':
+        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous)
+        model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde)
+        factor = Curriculum['factor']
+        callback = TrackCurriculumCallback(eval_env = env, factor = factor, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
+        train_timesteps = Curriculum['ts']
+        env.reservoir_use = True
+        env.reservoir_capacity = 50000
+        model.learn(total_timesteps= train_timesteps, callback = callback)
     else:
         constraint = Curriculum['constraint']
         learning_rate = Curriculum['learning_rate']
