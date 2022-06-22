@@ -73,7 +73,7 @@ if __name__ == "__main__":
         os.mkdir('Exp_architecture')
     os.chdir('Exp_architecture')
 
-    if environment_kwargs['continous']:
+    if environment_kwargs['continuous']:
         name = model_kwargs['method']+'_continuous_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
     else:
         name = model_kwargs['method']+'_discrete_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
