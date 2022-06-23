@@ -20,7 +20,8 @@ color = {
 
 if __name__ == "__main__":
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    network = ['tanh_1', 'relu_1', 'leakyrelu_1']
+    #network = ['tanh_1', 'relu_1', 'leakyrelu_1']
+    network = ['tanh_1', 'tanh_2', 'tanh_3', 'tanh_4', 'tanh_5', 'tanh_6', 'tanh_7', 'tanh_8', 'tanh_9']
 
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)
@@ -84,5 +85,5 @@ if __name__ == "__main__":
 
     
     fig.legend()
-    plt.savefig('metrics_2.png')
+    plt.savefig('metrics.png')
     plt.close(fig)

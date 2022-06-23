@@ -31,8 +31,8 @@ if __name__ == "__main__":
         'target' : (800, 200),
         'radius' : 30,
         'dt' : 4,
-        'initial_angle' : 0,
-        'wind_info' : wind_info_1,
+        'initial_angle' : 315,
+        'wind_info' : wind_info_4,
         'continuous' : True
     }
     
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 3,
+        'reward_number' : 1,
         'scale' : 0.01,
         'bonus': 10
     }
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
-    scales = [5000, 10000]
+    scales = [0.01, 0.1, 1, 10, 100, 1000]
 
     if not os.path.exists('log_files'):
         os.mkdir('log_files')
