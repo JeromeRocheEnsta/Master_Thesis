@@ -70,7 +70,7 @@ if __name__ == "__main__":
     os.chdir(name)
 
     for bonus in bonuses:
-            log = 'scale_'+str(bonus)
+            log = 'bonus_'+str(bonus)
 
             reward_kwargs['bonus'] = bonus
 
