@@ -8,7 +8,7 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000}
+    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000}
 
     environment_kwargs = {
         'propulsion' : 'variable',
@@ -24,9 +24,9 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 0.90,
+        'gamma' : 0.9,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 1000,
+        'train_timesteps' : 500000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
