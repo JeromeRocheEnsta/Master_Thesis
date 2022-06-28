@@ -1,4 +1,5 @@
 import os
+import time
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -49,7 +50,7 @@ reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
 constraint_kwargs = {'reservoir_info' : [False, None]},
 seed = 1):
     print("Execution de train avec seed = {}".format(seed))
-    
+    start_time = time.time()
     ### Preprocess args
     
     # log_kwargs
@@ -201,7 +202,8 @@ seed = 1):
         file1.write('Stochastic Path ({}/10) info: \n'.format(episode + 1))
         file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(ep_reward, len(env.time) - 1, round(env.time[-1], 1), round(env.energy[-1])))
 
-
+    print("Training with seed number {} took --- {} seconds ---".format(seed, time.time() - start_time))
+    '''
     # Monte-Carlo estimator 
     MonteCarlo = []
     for episode in range(1000):
@@ -232,7 +234,7 @@ seed = 1):
     del env
     del env_ref
     file1.close()
-
+    '''
     
 
         
