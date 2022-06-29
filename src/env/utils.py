@@ -43,6 +43,6 @@ def reward_sparse(is_target, scale = 1):
 
 
 
-def energy(v_prop, mu, k = 0.1, n = 2):
-    return(k * ( (v_prop) ** n) )
+def energy(v_prop, mu, dt = 4, k = 0.1, n = 2):
+    return(k * (v_prop**n) * dt )
 

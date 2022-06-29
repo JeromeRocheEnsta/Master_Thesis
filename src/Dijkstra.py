@@ -37,9 +37,37 @@ def cost_function(wind_map, x, m, info):
         angle = 90
     elif info == 'bottom':
         angle = 270
+    elif info == 'top_right':
+        angle = 45
+    elif info == 'top_left':
+        angle = 135
+    elif info == 'bottom_right':
+        angle = 315
+    elif info == 'bottom_left':
+        angle = 225
     v_prop = np.sqrt(( - magnitude * np.cos(direction * np.pi / 180) + mu *np.cos(angle* np.pi / 180))**2 + (( - magnitude * np.sin(direction * np.pi / 180) + mu *np.sin(angle* np.pi / 180))**2))
     #print(magnitude, direction, v_prop)
-    return energy(v_prop, mu)
+    return energy(v_prop, mu, dt)
+
+def add_top_right(wind_map, x, m):
+    next = x - m + 1
+    cost = np.sqrt(2) * cost_function(wind_map, x, m, 'top_right')  #the distance is greter than the horizontal or vertical one.
+    return next , cost
+
+def add_top_left(wind_map, x, m):
+    next = x - m - 1
+    cost = np.sqrt(2) * cost_function(wind_map, x, m, 'top_left')  #the distance is greter than the horizontal or vertical one.
+    return next , cost
+
+def add_bottom_right(wind_map, x, m):
+    next = x + m + 1
+    cost = np.sqrt(2) * cost_function(wind_map, x, m, 'bottom_right')  #the distance is greter than the horizontal or vertical one.
+    return next , cost
+
+def add_bottom_left(wind_map, x, m):
+    next = x + m - 1
+    cost = np.sqrt(2) * cost_function(wind_map, x, m, 'bottom_left')  #the distance is greter than the horizontal or vertical one.
+    return next , cost
 
 def add_top(wind_map, x, m):
     next = x - m
@@ -63,7 +91,7 @@ def add_left(wind_map, x, m):
 
 if __name__ == "__main__":
     ## Wind map
-    wind_info = wind_info_4
+    wind_info = wind_info_2
     discrete_maps = get_discrete_maps(wind_info['info'])
     wind_map = WindMap(discrete_maps, wind_info['lengthscale'])
     
@@ -97,22 +125,25 @@ if __name__ == "__main__":
             graph.add_edge(x, next, cost)
             next, cost = add_right(wind_map, x, m)
             graph.add_edge(x, next, cost)
-        elif(x == m-1): # corner right top
+            next, cost = add_bottom_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+        elif(x // m == 0): # top edge
             next, cost = add_bottom(wind_map, x, m)
             graph.add_edge(x, next, cost)
             next, cost = add_right(wind_map, x, m)
             graph.add_edge(x, next, cost)
             next, cost = add_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
-        elif(x // m == 0): # top edge
+            next, cost = add_bottom_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_bottom_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+        elif(x == m-1): # corner right top
             next, cost = add_bottom(wind_map, x, m)
             graph.add_edge(x, next, cost)
             next, cost = add_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
-        elif(x == m*m - 1): # corner right bottom
-            next, cost = add_top(wind_map, x, m)
-            graph.add_edge(x, next, cost)
-            next, cost = add_left(wind_map, x, m)
+            next, cost = add_bottom_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
         elif(x % m == m-1): # right edge
             next, cost = add_top(wind_map, x, m)
@@ -121,10 +152,16 @@ if __name__ == "__main__":
             graph.add_edge(x, next, cost)
             next, cost = add_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
-        elif(x == m*(m-1)): # corner left bottom
+            next, cost = add_top_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_bottom_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+        elif(x == m*m - 1): # corner right bottom
             next, cost = add_top(wind_map, x, m)
             graph.add_edge(x, next, cost)
-            next, cost = add_right(wind_map, x, m)
+            next, cost = add_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_top_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
         elif(x // m == m-1): # bottom edge
             next, cost = add_top(wind_map, x, m)
@@ -133,12 +170,27 @@ if __name__ == "__main__":
             graph.add_edge(x, next, cost)
             next, cost = add_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
+            next, cost = add_top_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_top_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+        elif(x == m*(m-1)): # corner left bottom
+            next, cost = add_top(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_top_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
         elif(x % m == 0): # left edge
             next, cost = add_top(wind_map, x, m)
             graph.add_edge(x, next, cost)
             next, cost = add_bottom(wind_map, x, m)
             graph.add_edge(x, next, cost)
             next , cost = add_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_top_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_bottom_right(wind_map, x, m)
             graph.add_edge(x, next, cost)
         else: # all other edges
             next, cost = add_top(wind_map, x, m)
@@ -148,6 +200,14 @@ if __name__ == "__main__":
             next , cost = add_right(wind_map, x, m)
             graph.add_edge(x, next, cost)
             next , cost = add_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_top_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_bottom_right(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_top_left(wind_map, x, m)
+            graph.add_edge(x, next, cost)
+            next, cost = add_bottom_left(wind_map, x, m)
             graph.add_edge(x, next, cost)
 
     print('m = {}\n'.format(m))
