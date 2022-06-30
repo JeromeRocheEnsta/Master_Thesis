@@ -91,7 +91,7 @@ def add_left(wind_map, x, m):
 
 if __name__ == "__main__":
     ## Wind map
-    wind_info = wind_info_2
+    wind_info = wind_info_4
     discrete_maps = get_discrete_maps(wind_info['info'])
     wind_map = WindMap(discrete_maps, wind_info['lengthscale'])
     

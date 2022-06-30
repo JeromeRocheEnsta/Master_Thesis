@@ -205,7 +205,7 @@ def filter():
     pass
 
 
-def get_data(seeds, scale = None, bonus = None):
+def get_data(seeds, scale = None, bonus = None, gamma = 1):
     ## Need the current path to be in the directory containing the seeds directory
     n = len(seeds)
     mean_reward = []
@@ -263,7 +263,7 @@ def get_data(seeds, scale = None, bonus = None):
                 if bonus == None:
                     exec('rewards.append(float(line[1])/scale)')
                 else:
-                    exec('rewards.append((float(line[1])-bonus)/scale)')
+                    exec('rewards.append((float(line[1])-bonus/scale)')
             exec('lengths.append(float(line[2]))')
             exec('energies.append(float(line[3]))')
             count += 1
