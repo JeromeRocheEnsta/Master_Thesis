@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     for idx, bonus in enumerate(bonuses):
         os.chdir('bonus_'+str(bonus))
-        timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds, scale = 0.01)
+        timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds, bonus = bonus, scale = 0.01)
         
         ### Reward plot
         up = []

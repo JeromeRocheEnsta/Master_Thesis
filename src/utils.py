@@ -223,8 +223,8 @@ def get_data(seeds, scale = None, bonus = None, gamma = 1):
     file_ref_path.readline()
     ref_line = file_ref_path.readline()
     ref_line = ref_line.split()
-    ref_reward = float(ref_line[3][:-1]) if bonus == None else float(ref_line[3][:-1]) - bonus
-    ref_reward = ref_reward if scale == None else ref_reward/scale
+    ref_reward = float(ref_line[3][:-1]) if scale == None else float(ref_line[3][:-1])/scale
+    ref_reward = ref_reward if bonus == None else ref_reward - bonus
     ref_length = float(ref_line[6][:-1])
     ref_energy = float(ref_line[13])
     file_ref_path.close()
@@ -263,7 +263,7 @@ def get_data(seeds, scale = None, bonus = None, gamma = 1):
                 if bonus == None:
                     exec('rewards.append(float(line[1])/scale)')
                 else:
-                    exec('rewards.append((float(line[1])-bonus/scale)')
+                    exec('rewards.append(float(line[1])/scale - bonus)')
             exec('lengths.append(float(line[2]))')
             exec('energies.append(float(line[3]))')
             count += 1
