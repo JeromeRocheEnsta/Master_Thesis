@@ -193,7 +193,7 @@ class WindEnv_gym(gym.Env):
         
         distance_to_target =  np.sqrt( (self.start[0] - self.target[0])**2 + (self.start[1] - self.target[1])**2 )
         sign = np.sign(self.target[1] - self.start[1])
-        if(self.state[1] == self.target[0]):
+        if(self.start[1] == self.target[0]):
             direction_to_target =  sign%360
         else:
             angle = np.arctan((abs(self.start[1] - self.target[1]))/(abs(self.start[0] - self.target[0])))
