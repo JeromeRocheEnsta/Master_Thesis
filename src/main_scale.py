@@ -31,8 +31,8 @@ if __name__ == "__main__":
         'target' : (800, 200),
         'radius' : 30,
         'dt' : 4,
-        'initial_angle' : 0,
-        'wind_info' : wind_info_1,
+        'initial_angle' : 315,
+        'wind_info' : wind_info_2,
         'continuous' : True
     }
     
