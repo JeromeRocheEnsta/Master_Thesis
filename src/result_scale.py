@@ -20,8 +20,8 @@ color = {
 
 if __name__ == "__main__":
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    #scales = [0.01, 0.1, 1, 10, 100, 1000]
-    scales = [0.1, 1]
+    scales = [0.01, 0.1, 1, 10, 100, 1000]
+    #scales = [0.1, 1]
 
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)
