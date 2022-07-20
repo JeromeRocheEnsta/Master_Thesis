@@ -83,11 +83,11 @@ class WindEnv_gym(gym.Env):
         # Dim state
         self.dim_state = dim_state
         if self.dim_state == 3:
-            self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth)], dtype = np.float), shape = (5,), dtype = np.float)
+            self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth)], dtype = np.float), shape = (3,), dtype = np.float)
         elif self.dim_state == 5:
             self.observation_space = spaces.Box( low = np.array([0., 0., 0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth), np.sqrt(self.length**2 + self.heigth**2), 360.], dtype = np.float), shape = (5,), dtype = np.float)
         elif self.dim_state == 7:
-            self.observation_space = spaces.Box( low = np.array([0., 0., 0., 0., 0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth), np.sqrt(self.length**2 + self.heigth**2), 360., 20., 360.], dtype = np.float), shape = (5,), dtype = np.float)
+            self.observation_space = spaces.Box( low = np.array([0., 0., 0., 0., 0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth), np.sqrt(self.length**2 + self.heigth**2), 360., 20., 360.], dtype = np.float), shape = (7,), dtype = np.float)
 
     def _target(self):
         dist = (self.state[1] - self.target[0])**2 + (self.state[2] - self.target[1])**2

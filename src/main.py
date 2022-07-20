@@ -22,13 +22,13 @@ if __name__ == "__main__":
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
         'continuous' : True,
-        'dim_state' : 3
+        'dim_state' : 7
     }
     
     model_kwargs = {
         'gamma' : 0.9,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 10000,
+        'train_timesteps' : 1000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64,
