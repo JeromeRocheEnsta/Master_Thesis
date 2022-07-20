@@ -43,7 +43,7 @@ SMOKE_TEST = os.environ.get("SMOKE_TEST")
 
 def train( log_kwargs = {'save' : False},
 environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900),
-'target' : (800, 200), 'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0, 'wind_info' : wind_info_1},
+'target' : (800, 200), 'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0, 'wind_info' : wind_info_1, 'dim_state' : 3},
 model_kwargs = {'gamma' : 0.99, 'n_eval_episodes' : 1000, 'dim' : 4,
 'bounds' : torch.tensor([ [-1, -1, -1, -1] , [1, 1, 1, 1] ], dtype = torch.float64),
 'batch_size' : 4}, #method within qEI, Sobol, TuRBO
@@ -71,6 +71,7 @@ seed = 0):
     continuous = environment_kwargs['continuous'] if 'continuous' in environment_kwargs else True
     wind_info = environment_kwargs['wind_info']['info']
     wind_lengthscale = environment_kwargs['wind_info']['lengthscale']
+    dim_state = environment_kwargs['dim_state'] if 'dim_state' in environment_kwargs else 3
 
     # model_kwargs
     gamma = model_kwargs['gamma']
@@ -104,7 +105,7 @@ seed = 0):
 
     # reference path
     straight_angle = get_straight_angle(start, target)
-    env_ref = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale)
+    env_ref = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale, dim_state= dim_state)
     env_ref.reset()
     reward_ref = 0
     while env_ref._target() == False:
@@ -118,7 +119,7 @@ seed = 0):
 
 
     #BO for RL 
-    env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+    env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, dim_state= dim_state)
 
     X_turbo, Y_turbo = TuRBO(env, dim, n_init, bounds, n_eval_episodes, batch_size)
     n_iter = len(X_turbo)
