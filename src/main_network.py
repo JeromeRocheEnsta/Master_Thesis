@@ -6,6 +6,7 @@ from utils import *
 
 Network = {
     1 : [dict(pi = [64,64], vf = [64,64])],
+    2 : [dict(pi = [32,32], vf = [32,32])],
     #2 : [dict(pi = [100,50,25], vf = [100,50,25])],
     #3 : [dict(pi = [400, 300], vf = [400, 300])],
 }
@@ -31,7 +32,7 @@ if __name__ == "__main__":
         'radius' : 30,
         'dt' : 4,
         'initial_angle' : 0,
-        'wind_info' : wind_info_4,
+        'wind_info' : wind_info_1,
         'continuous' : True
     }
     
@@ -47,7 +48,7 @@ if __name__ == "__main__":
 
     reward_kwargs = {
         'reward_number' : 1,
-        'scale' : 0.01,
+        'scale' : 1,
         'bonus': 10
     }
 
