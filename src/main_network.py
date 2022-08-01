@@ -14,7 +14,9 @@ Network = {
 Activation  = {
     'relu' : th.nn.ReLU,
     'tanh' : th.nn.Tanh,
-    'leakyrelu' : th.nn.LeakyReLU
+    'leakyrelu' : th.nn.LeakyReLU,
+    'sigmoig' : th.nn.Sigmoid,
+    'softplus' : th.nn.Softplus
 }
 
 if __name__ == "__main__":
