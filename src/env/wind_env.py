@@ -28,7 +28,7 @@ class WindEnv_gym(gym.Env):
         if self.continuous:
             self.ha = ha
         else:
-            self.ha = 'next_state'
+            self.ha = ha
         self.scale = scale #Reward scaling
         self.bonus = bonus # bonus for reaching the goal
         self.magnitude_max = 20
@@ -78,7 +78,7 @@ class WindEnv_gym(gym.Env):
         if self.continuous:
             self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float)
         else:
-            self.action_space = spaces.Discrete(4)
+            self.action_space = spaces.Discrete(9)
 
         # Dim state
         self.dim_state = dim_state
@@ -271,13 +271,23 @@ class WindEnv_gym(gym.Env):
             self.state[0] = self.state[0] % 360
         else:
             if action == 0:
-                self.state[0] = 0
+                self.state[0] -= 15
             elif action == 1:
-                self.state[0] = 90
+                self.state[0] -= 7.5
             elif action == 2:
-                self.state[0] = 180
+                self.state[0] -= 5
             elif action == 3:
-                self.state[0] = 270
+                self.state[0] -= 2.5
+            elif action == 4:
+                self.state[0] += 0
+            elif action == 5:
+                self.state[0] += 2.5
+            elif action == 6:
+                self.state[0] += 5
+            elif action == 7:
+                self.state[0] += 7.5
+            elif action == 8:
+                self.state[0] += 15
             else:
                 raise Exception('The action is not possible (case : Discrete)')
 
