@@ -21,13 +21,14 @@ if __name__ == "__main__":
         'dt' : 4,
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
-        'continuous' : True
+        'continuous' : True,
+        'dim_state' : 7
     }
     
     model_kwargs = {
         'gamma' : 0.9,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 500000,
+        'train_timesteps' : 1000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64,
@@ -45,8 +46,8 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
-    seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    #seeds = [1]
+    #seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    seeds = [1]
     
     
 
@@ -61,9 +62,9 @@ if __name__ == "__main__":
         os.mkdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
     os.chdir('wind_map_'+str(environment_kwargs['wind_info']['number']))
     if environment_kwargs['continuous']:
-        name = 'png_continuous_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
+        name = 'png_continuous_'+str(environment_kwargs['dim_state'])+'_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
     else:
-        name = 'png_discrete_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
+        name = 'png_discrete_'+str(environment_kwargs['dim_state'])+'_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+str(reward_kwargs['scale'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
     os.mkdir(name)
     os.chdir(name)
     #Multi Porcessing

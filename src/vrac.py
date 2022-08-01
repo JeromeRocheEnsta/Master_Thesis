@@ -60,7 +60,7 @@ dt = 4
 gamma = 0.9
 train_timesteps = 1000
 
-env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_info['lengthscale'], alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle)
+env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_info['lengthscale'], alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, dim_state = 3)
 
 check_env(env)
 

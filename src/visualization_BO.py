@@ -45,6 +45,7 @@ target = (800, 200)
 radius = 30
 dt = 4
 initial_angle = 0
+dim_state = 3
 
 
 
@@ -61,7 +62,7 @@ wind_info = wind_info_3
 discrete_maps = get_discrete_maps(wind_info['info'])
 A = WindMap(discrete_maps, wind_info['lengthscale'])
 
-env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_info['lengthscale'], alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info)
+env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_info['lengthscale'], alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, dim_state = dim_state)
 
 grid = np.linspace(-1, 1, 50)
 

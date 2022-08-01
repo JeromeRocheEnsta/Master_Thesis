@@ -12,7 +12,7 @@ from env.utils import reward_1, reward_2, reward_4, reward_sparse, energy
 class WindEnv_gym(gym.Env):
     def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant',
     ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None],
-    continuous = True):
+    continuous = True, dim_state = 5):
         super(WindEnv_gym, self).__init__()
         self.continuous = continuous
 
@@ -79,7 +79,15 @@ class WindEnv_gym(gym.Env):
             self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float)
         else:
             self.action_space = spaces.Discrete(4)
-        self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float), high = np.array([360., 1000., 1000.], dtype = np.float), shape = (3,), dtype = np.float)
+
+        # Dim state
+        self.dim_state = dim_state
+        if self.dim_state == 3:
+            self.observation_space = spaces.Box( low = np.array([0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth)], dtype = np.float), shape = (3,), dtype = np.float)
+        elif self.dim_state == 5:
+            self.observation_space = spaces.Box( low = np.array([0., 0., 0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth), np.sqrt(self.length**2 + self.heigth**2), 360.], dtype = np.float), shape = (5,), dtype = np.float)
+        elif self.dim_state == 7:
+            self.observation_space = spaces.Box( low = np.array([0., 0., 0., 0., 0., 0., 0.], dtype = np.float), high = np.array([360., float(self.length), float(self.heigth), np.sqrt(self.length**2 + self.heigth**2), 360., 20., 360.], dtype = np.float), shape = (7,), dtype = np.float)
 
     def _target(self):
         dist = (self.state[1] - self.target[0])**2 + (self.state[2] - self.target[1])**2
@@ -91,7 +99,7 @@ class WindEnv_gym(gym.Env):
 
 
 
-    def _next_observation(self, next_x, next_y):
+    def _next_observation(self, next_x, next_y, magnitude, direction):
         counter = 0
         if(next_x > 1000 or next_x < 0):
             counter += 1
@@ -162,12 +170,43 @@ class WindEnv_gym(gym.Env):
                 else:
                     self.state[0] = self.state[0] - 2 * ( self.state[0] - 180 ) # first deviation
                     self.state[0] = self.state[0] - 2 * ( self.state[0] - 90 ) # second deviation
-        # Change the heading angle 
-        # change the previous state position, next_x, next_y and find if after the correction the uav is still outside or not
-        obs = np.zeros((3,), dtype = np.float)
-        obs[0] = self.state[0]
-        obs[1] = self.state[1]
-        obs[2] = self.state[2]
+        
+        # Update the other element of the state
+        if self.dim_state == 5 or self.dim_state == 7:
+            self.state[3] = np.sqrt( (self.state[1] - self.target[0])**2 + (self.state[2] - self.target[1])**2 )
+            sign = np.sign(self.target[1] - self.state[2])
+            if(self.state[1] == self.target[0]):
+                self.state[4] = sign%360
+            else:
+                angle = np.arctan((abs(self.state[2] - self.target[1]))/(abs(self.state[1] - self.target[0])))
+                self.state[4] = (sign * angle)%360 if self.state[1] < self.target[0] else 180 + sign * angle
+        if self.dim_state == 7:
+            self.state[5] = magnitude
+            self.state[6] = direction%360
+
+        if self.dim_state == 3:
+            obs = np.zeros((3,), dtype = np.float)
+            obs[0] = self.state[0]
+            obs[1] = self.state[1]
+            obs[2] = self.state[2]
+        elif self.dim_state == 5:
+            obs = np.zeros((5,), dtype = np.float)
+            obs[0] = self.state[0]
+            obs[1] = self.state[1]
+            obs[2] = self.state[2]
+            obs[3] = self.state[3]
+            obs[4] = self.state[4]
+        elif self.dim_state == 7:
+            obs = np.zeros((7,), dtype = np.float)
+            obs[0] = self.state[0]
+            obs[1] = self.state[1]
+            obs[2] = self.state[2]
+            obs[3] = self.state[3]
+            obs[4] = self.state[4]
+            obs[5] = self.state[5]
+            obs[6] = self.state[6]
+
+        
         return obs
 
 
@@ -179,15 +218,49 @@ class WindEnv_gym(gym.Env):
         self.trajectory_action = []
         self.energy = [0]
         self.time = [0]
-        self.state = np.array([self.initial_angle, self.start[0], self.start[1]], dtype = np.float)
+        
+        if self.dim_state == 5 or self.dim_state == 7:
+            distance_to_target =  np.sqrt( (self.start[0] - self.target[0])**2 + (self.start[1] - self.target[1])**2 )
+            sign = np.sign(self.target[1] - self.start[1])
+            if(self.start[1] == self.target[0]):
+                direction_to_target =  sign%360
+            else:
+                angle = np.arctan((abs(self.start[1] - self.target[1]))/(abs(self.start[0] - self.target[0])))
+                direction_to_target = (sign * angle)%360 if self.start[0] < self.target[0] else 180 + sign * angle
+        if self.dim_state == 7:
+            magnitude = float(self.wind_map._get_magnitude([(self.start[0], self.start[1])]))
+            direction = float(self.wind_map._get_direction([(self.start[0], self.start[1])])) % 360
+
+        if self.dim_state == 3:
+            self.state = np.array([self.initial_angle, self.start[0], self.start[1]], dtype = np.float)
+        elif self.dim_state == 5:
+            self.state = np.array([self.initial_angle, self.start[0], self.start[1], distance_to_target, direction_to_target], dtype = np.float)
+        elif self.dim_state == 7:
+            self.state = np.array([self.initial_angle, self.start[0], self.start[1], distance_to_target, direction_to_target, magnitude, direction], dtype = np.float)
 
         self.reservoir = None if self.reservoir_use == False else self.reservoir_capacity
 
-        obs = np.zeros((3,), dtype = np.float)
-        obs[0] = self.state[0]
-        obs[1] = self.state[1]
-        obs[2] = self.state[2]
-
+        if self.dim_state == 3:
+            obs = np.zeros((3,), dtype = np.float)
+            obs[0] = self.state[0]
+            obs[1] = self.state[1]
+            obs[2] = self.state[2]
+        elif self.dim_state == 5:
+            obs = np.zeros((5,), dtype = np.float)
+            obs[0] = self.state[0]
+            obs[1] = self.state[1]
+            obs[2] = self.state[2]
+            obs[3] = self.state[3]
+            obs[4] = self.state[4]
+        elif self.dim_state == 7:
+            obs = np.zeros((7,), dtype = np.float)
+            obs[0] = self.state[0]
+            obs[1] = self.state[1]
+            obs[2] = self.state[2]
+            obs[3] = self.state[3]
+            obs[4] = self.state[4]
+            obs[5] = self.state[5]
+            obs[6] = self.state[6]
         return(  obs ) 
 
     def step(self, action):
@@ -251,7 +324,7 @@ class WindEnv_gym(gym.Env):
         
         if reservoir_condition:
             # We have enough energy to move
-            obs = self._next_observation(np.float(next_x), np.float(next_y) )
+            obs = self._next_observation(np.float(next_x), np.float(next_y), magnitude, direction)
 
             self.trajectory_ha.append(self.state[0])
             self.trajectory_x.append(self.state[1])
@@ -266,7 +339,7 @@ class WindEnv_gym(gym.Env):
             return(obs, self.reward(), self._target(), {})
         else:
             # We don't have enough energy to continue moving
-            obs = self._next_observation(np.float(previous_coordinate[0]), np.float(previous_coordinate[1]) )
+            obs = self._next_observation(np.float(previous_coordinate[0]), np.float(previous_coordinate[1]), magnitude, direction)
 
             self.trajectory_ha.append(self.state[0])
             self.trajectory_x.append(self.state[1])
@@ -291,7 +364,7 @@ class WindEnv_gym(gym.Env):
             return reward_2(magnitude, self.magnitude_max, direction, (self.state[1], self.state[2]), self.target, self._target(), self.bonus, self.scale)
         elif(self.reward_number == 3):
             return reward_sparse(self._target(), self.scale)
-        elif(self.reward_number == 3):
+        elif(self.reward_number == 4):
             return reward_4(energy(self.propulsion_velocity, self.mu), self._target(),self.bonus, self.scale)
         else:
             raise Exception("This reward number is not available yet")

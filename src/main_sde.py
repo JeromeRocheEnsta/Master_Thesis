@@ -33,7 +33,8 @@ if __name__ == "__main__":
         'dt' : 4,
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
-        'continuous' : True
+        'continuous' : True,
+        'dim_state' : 3
     }
     
     model_kwargs = {
@@ -73,9 +74,9 @@ if __name__ == "__main__":
     os.chdir('Exp_sde')
     
     if environment_kwargs['continuous']:
-        name = model_kwargs['method']+'_continuous_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
+        name = model_kwargs['method']+'_continuous_'+str(environment_kwargs['dim_state'])+'_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
     else:
-        name = model_kwargs['method']+'_discrete_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
+        name = model_kwargs['method']+'_discrete_'+str(environment_kwargs['dim_state'])+'_'+str(reward_kwargs['reward_number'])+'_'+str(reward_kwargs['bonus'])+'_'+environment_kwargs['ha']+'_'+str(environment_kwargs['alpha'])+'_'+str(environment_kwargs['dt'])+'_'+str(model_kwargs['gamma'])+'_'+str(model_kwargs['train_timesteps'])
     if not os.path.exists(name):
         os.mkdir(name)
     os.chdir(name)
