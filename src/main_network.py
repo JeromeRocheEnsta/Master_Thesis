@@ -35,7 +35,7 @@ if __name__ == "__main__":
         'dt' : 4,
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
-        'continuous' : True,
+        'continuous' : False,
         'dim_state' : 7
     }
     
