@@ -290,6 +290,7 @@ class WindEnv_gym(gym.Env):
                 self.state[0] += 15
             else:
                 raise Exception('The action is not possible (case : Discrete)')
+            self.state[0] = self.state[0] % 360
 
         magnitude = float(self.wind_map._get_magnitude([(previous_coordinate[0], previous_coordinate[1])]))
         direction = float(self.wind_map._get_direction([(previous_coordinate[0], previous_coordinate[1])])) % 360
