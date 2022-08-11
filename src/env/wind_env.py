@@ -275,7 +275,7 @@ class WindEnv_gym(gym.Env):
             indic = False
             for i in range (len(self.discrete)):
                 if action == i:
-                    self.action[0] += self.discrete[i]
+                    self.state[0] += self.discrete[i]
                     indic = True
                     break
             if not indic:
