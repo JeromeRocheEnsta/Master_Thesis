@@ -23,7 +23,8 @@ if __name__ == "__main__":
         'initial_angle' : 0,
         'wind_info' : wind_info_3,
         'continuous' : True,
-        'dim_state' : 3
+        'dim_state' : 3,
+        'discrete' : []
     }
     
     model_kwargs = {

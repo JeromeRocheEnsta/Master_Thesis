@@ -12,9 +12,11 @@ from env.utils import reward_1, reward_2, reward_4, reward_sparse, energy
 class WindEnv_gym(gym.Env):
     def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant',
     ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None],
-    continuous = True, dim_state = 5):
+    continuous = True, dim_state = 5, discrete = []):
         super(WindEnv_gym, self).__init__()
         self.continuous = continuous
+        if not self.continuous:
+            self.discrete = discrete
 
         ### Reservoir Info
         self.reservoir_use = reservoir_info[0]
@@ -78,7 +80,7 @@ class WindEnv_gym(gym.Env):
         if self.continuous:
             self.action_space = spaces.Box(np.array([-1]), np.array([1]), shape = (1,), dtype = np.float)
         else:
-            self.action_space = spaces.Discrete(9)
+            self.action_space = spaces.Discrete(len(self.discrete))
 
         # Dim state
         self.dim_state = dim_state
@@ -270,25 +272,13 @@ class WindEnv_gym(gym.Env):
             self.state[0] = self.state[0] if self.straight else self.state[0] + action * self.alpha
             self.state[0] = self.state[0] % 360
         else:
-            if action == 0:
-                self.state[0] -= 15
-            elif action == 1:
-                self.state[0] -= 7.5
-            elif action == 2:
-                self.state[0] -= 5
-            elif action == 3:
-                self.state[0] -= 2.5
-            elif action == 4:
-                self.state[0] += 0
-            elif action == 5:
-                self.state[0] += 2.5
-            elif action == 6:
-                self.state[0] += 5
-            elif action == 7:
-                self.state[0] += 7.5
-            elif action == 8:
-                self.state[0] += 15
-            else:
+            indic = False
+            for i in range (len(self.discrete)):
+                if action == i:
+                    self.action[0] += self.discrete[i]
+                    indic = True
+                    break
+            if not indic:
                 raise Exception('The action is not possible (case : Discrete)')
             self.state[0] = self.state[0] % 360
 

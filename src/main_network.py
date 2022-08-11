@@ -23,7 +23,7 @@ if __name__ == "__main__":
     #########################
     ### Control interface ###
     #########################
-    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000}
+    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000, 'MonteCarlo' : False}
 
     environment_kwargs = {
         'propulsion' : 'variable',
@@ -36,7 +36,8 @@ if __name__ == "__main__":
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
         'continuous' : False,
-        'dim_state' : 7
+        'dim_state' : 7,
+        'discrete' : [-15, -7.5, -5, -2.5, 0, 2.5, 5, 7.5, 15]
     }
     
     model_kwargs = {
