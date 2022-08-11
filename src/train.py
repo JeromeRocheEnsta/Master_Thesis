@@ -205,11 +205,11 @@ seed = 1):
         file1.write('Stochastic Path ({}/10) info: \n'.format(episode + 1))
         file1.write('Cumulative Reward : {}; Timesteps : {}; Time : {}; Energy Consumed : {} \n'.format(ep_reward, len(env.time) - 1, round(env.time[-1], 1), round(env.energy[-1])))
 
-    print("Training with seed number {} took --- {} seconds ---".format(seed, time.time() - start_time))
+    
     if MonteCarlo:
         # Monte-Carlo estimator 
-        MonteCarlo = []
-        for episode in range(1000):
+        file = open(dir_name+'/MonteCarlo.txt', 'w')
+        for episode in range(2000):
             ep_reward = 0
             obs = env.reset()
             for i in range(1000):
@@ -219,24 +219,16 @@ seed = 1):
                 env.render()
                 if done:
                     break
-            MonteCarlo.append(ep_reward)
+            ep_reward /= episode + 1
+            file.write(str(ep_reward)+'\n')
+        file.close()
 
-        for idx in range(len(MonteCarlo)):
-            if idx > 0:
-                MonteCarlo[idx] += MonteCarlo[idx - 1]
-        for idx in range(len(MonteCarlo)):
-            MonteCarlo[idx] /= idx+1
-
-        plt.plot(np.linspace(1, 1000, 1000, dtype = int), MonteCarlo)
-        plt.xlabel('N')
-        plt.ylabel('N-run Monte-Carlo Estimator of the Expected Reward')
-        plt.savefig(dir_name+'/Monte_Carlo_estimator.png')
-        plt.close(fig)
-
-        del model
-        del env
-        del env_ref
+    del model
+    del env
+    del env_ref
+    if save:
         file1.close()
+    print("Training with seed number {} took --- {} seconds ---".format(seed, time.time() - start_time))
         
     
 
