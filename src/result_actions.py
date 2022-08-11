@@ -19,11 +19,16 @@ color = {
 }
 
 if __name__ == "__main__":
-    scale = 1
-    bonus = 10
+    scale = 0.01
+    bonus = 1
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    #network = ['tanh_1', 'relu_1', 'leakyrelu_1']
-    network = ['tanh_1', 'tanh_2', 'relu_1', 'relu_2', 'sigmoig_1', 'sigmoig_2', 'softplus_1', 'softplus_2']
+    Configurations = {
+        0 : [],
+        1 : [-15, -7.5, -5, -2.5, 0, 2.5, 5, 7.5, 15],
+        2 : [-15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15],
+        3 : [-20, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 20],
+        4 : [-30, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 30],
+    }
 
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)
@@ -34,8 +39,8 @@ if __name__ == "__main__":
     ax[2].xaxis.set_major_locator(xticks)
 
 
-    for idx, net in enumerate(network):
-        os.chdir(net)
+    for cle, valeur in Configurations.items():
+        os.chdir('configuration_'+str(cle))
         timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds, scale = scale, bonus = bonus)
         
         ### Reward plot
