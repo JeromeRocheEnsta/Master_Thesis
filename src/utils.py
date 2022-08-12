@@ -246,12 +246,12 @@ def get_data(seeds, scale = None, bonus = None, gamma = 1):
         lengths = []
         energies = []
         for seed in seeds:
-            print(seed)
+            #print(seed)
             exec('line = file'+str(seed)+'.readline()')
             exec('line = line.split()')
             
             if seed == 1:
-                exec('print(line)')
+                #exec('print(line)')
                 exec('timesteps.append(float(line[0]))')
 
             if scale == None:
