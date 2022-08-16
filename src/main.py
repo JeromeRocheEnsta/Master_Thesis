@@ -48,7 +48,7 @@ if __name__ == "__main__":
     }
 
     seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    seeds = [i+1 for i in range(50)]
+    seeds = [51+i for i in range(50)]
     #seeds = [1]
     
     
