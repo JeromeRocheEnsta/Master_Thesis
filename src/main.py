@@ -9,7 +9,7 @@ if __name__ == "__main__":
     ### Control interface ###
     #########################
 
-    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000, 'MonteCarlo' : False}
+    log_kwargs = {'save' : True, 'n_eval_episodes_callback' : 500, 'eval_freq' : 5000, 'MonteCarlo' : True}
 
     environment_kwargs = {
         'propulsion' : 'variable',
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     model_kwargs = {
         'gamma' : 0.9,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 200000,
+        'train_timesteps' : 150000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64,
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     }
 
     seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    seeds = [51+i for i in range(50)]
+    #seeds = [51+i for i in range(50)]
     #seeds = [1]
     
     
