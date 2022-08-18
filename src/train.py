@@ -219,7 +219,6 @@ seed = 1):
                 env.render()
                 if done:
                     break
-            ep_reward /= episode + 1
             file.write(str(ep_reward)+'\n')
         file.close()
 
