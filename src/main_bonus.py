@@ -21,7 +21,7 @@ if __name__ == "__main__":
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
         'continuous' : True,
-        'dim_state' : 3,
+        'dim_state' : 7,
         'discrete' : []
     }
     
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 1,
+        'reward_number' : 4,
         'scale' : 0.1,
         'bonus': 10
     }
