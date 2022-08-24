@@ -26,9 +26,9 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 0.9,
+        'gamma' : 1,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 500000,
+        'train_timesteps' : 250000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
-    bonuses = [0, 1, 5, 10, 50, 100, 1000]
+    bonuses = [0, 1, 5, 10]#, 50, 100, 1000]
 
     if not os.path.exists('log_files'):
         os.mkdir('log_files')

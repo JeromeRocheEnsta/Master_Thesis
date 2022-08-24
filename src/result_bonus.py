@@ -19,8 +19,8 @@ color = {
 
 if __name__ == "__main__":
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    bonuses = [0, 1, 5, 10, 50, 100, 1000]
-
+    bonuses = [0, 1, 5, 10]#, 50, 100, 1000]
+    scale = 0.1
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     for idx, bonus in enumerate(bonuses):
         os.chdir('bonus_'+str(bonus))
-        timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds, bonus = bonus, scale = 1)
+        timesteps, mean_reward, ci_reward, mean_length, ci_length, mean_energy, ci_energy, ref_reward, ref_length, ref_energy = get_data(seeds, bonus = bonus, scale = scale)
         
         ### Reward plot
         up = []
