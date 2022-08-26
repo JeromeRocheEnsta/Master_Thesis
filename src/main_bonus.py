@@ -26,7 +26,7 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 1,
+        'gamma' : 0.99,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
         'train_timesteps' : 250000,
         'method' : 'PPO',
