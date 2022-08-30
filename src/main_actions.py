@@ -10,7 +10,8 @@ Configurations = {
     2 : [-15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15],
     3 : [-20, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 20],
     4 : [-30, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 30],
-    5 : [-15, -5, -1, 0, 1, 5, 15],
+    5 : [-50, -30, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 30, 50],
+    6 : [-15, -5, -1, 0, 1, 5, 15],
 }
 
 if __name__ == "__main__":
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 0.90,
+        'gamma' : 1,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
         'train_timesteps' : 200000,
         'method' : 'PPO',
@@ -45,9 +46,9 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 1,
+        'reward_number' : 4,
         'scale' : 1,
-        'bonus': 10
+        'bonus': 0
     }
 
     constraint_kwargs = {

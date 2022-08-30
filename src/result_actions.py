@@ -19,8 +19,8 @@ color = {
 }
 
 if __name__ == "__main__":
-    scale = 0.01
-    bonus = 1
+    scale = 1
+    bonus = 10
     seeds = [1,2,3,4,5,6,7,8,9,10]
     Configurations = {
         0 : [],
@@ -28,6 +28,7 @@ if __name__ == "__main__":
         2 : [-15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15],
         3 : [-20, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 20],
         4 : [-30, -15, -7.5, -5, -2.5, -1, 0, 1, 2.5, 5, 7.5, 15, 30],
+        5 : [-15, -5, -1, 0, 1, 5, 15],
     }
 
     fig, ax = plt.subplots(1, 3)
@@ -50,8 +51,8 @@ if __name__ == "__main__":
             up.append(mean_reward[i] + ci_reward[i])
             down.append(mean_reward[i] - ci_reward[i])
 
-        ax[0].plot(timesteps,mean_reward, color = color[idx], label = net)
-        ax[0].fill_between(timesteps, down, up, color= color[idx], alpha=.1)
+        ax[0].plot(timesteps,mean_reward, color = color[cle], label = 'configuration '+str(cle))
+        ax[0].fill_between(timesteps, down, up, color= color[cle], alpha=.1)
         ax[0].axhline(y=ref_reward, color='r', linestyle='-')
         ax[0].set_xlabel('Timesteps')
         ax[0].set_ylabel('Average Reward')
@@ -64,8 +65,8 @@ if __name__ == "__main__":
             down.append(mean_length[i] - ci_length[i])
 
 
-        ax[1].plot(timesteps,mean_length, color = color[idx])
-        ax[1].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
+        ax[1].plot(timesteps,mean_length, color = color[cle])
+        ax[1].fill_between(timesteps, down, up, color=color[cle], alpha=.1)
         ax[1].axhline(y=ref_length, color='r', linestyle='-')
         ax[1].set_xlabel('Timesteps')
         ax[1].set_ylabel('Average Length')
@@ -78,8 +79,8 @@ if __name__ == "__main__":
             up.append(mean_energy[i] + ci_energy[i])
             down.append(mean_energy[i] - ci_energy[i])
 
-        ax[2].plot(timesteps,mean_energy, color = color[idx])
-        ax[2].fill_between(timesteps, down, up, color=color[idx], alpha=.1)
+        ax[2].plot(timesteps,mean_energy, color = color[cle])
+        ax[2].fill_between(timesteps, down, up, color=color[cle], alpha=.1)
         ax[2].axhline(y=ref_energy, color='r', linestyle='-')
         ax[2].set_xlabel('Timesteps')
         ax[2].set_ylabel('Average Energy')
