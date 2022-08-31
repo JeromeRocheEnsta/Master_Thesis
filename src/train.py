@@ -43,7 +43,8 @@ def linear_schedule(initial_value: float, end_value: float, end_progress: float)
 
 def train(log_kwargs = {'save' : False, 'n_eval_episodes_callback' : 5, 'eval_freq' : 5000, 'MonteCarlo' : False},
 environment_kwargs = {'propulsion' : 'variable', 'ha' : 'propulsion', 'alpha' : 15, 'start' : (100, 900), 'target' : (800, 200),
-'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0, 'wind_info' : wind_info_1, 'continuous' : True, 'dim_state' : 3, 'discrete' : []},
+'radius' : 20, 'dt' : 1.8, 'initial_angle' : 0, 'wind_info' : wind_info_1, 'continuous' : True, 'dim_state' : 3, 'discrete' : [],
+'restart' : 'fix'},
 model_kwargs = {'gamma' : 0.99, 'policy_kwargs' : None, 'train_timesteps' : 150000, 'method' : 'PPO','n_steps' : 2048,
 'batch_size' : 64, 'use_sde' : False},
 reward_kwargs = {'reward_number' : 1, 'scale' : 1, 'bonus': 10},
@@ -71,6 +72,7 @@ seed = 1):
     continuous = environment_kwargs['continuous'] if 'continuous' in environment_kwargs else True
     discrete = [] if continuous else environment_kwargs['discrete']
     dim_state = environment_kwargs['dim_state'] if 'dim_state' in environment_kwargs else 3
+    restart = environment_kwargs['restart'] if 'restart' in environment_kwargs else 'fix'
 
     wind_info = environment_kwargs['wind_info']['info']
     wind_lengthscale = environment_kwargs['wind_info']['lengthscale']
@@ -115,7 +117,7 @@ seed = 1):
 
     # reference path
     straight_angle = get_straight_angle(start, target)
-    env_ref = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale, dim_state= dim_state)
+    env_ref = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius=radius, dt = dt, straight = True, ha = 'next_state', propulsion = propulsion, reward_number= reward_number, initial_angle= straight_angle, bonus = bonus, scale = scale, dim_state= dim_state, restart = 'fix')
     env_ref.reset()
     reward_ref = 0
     while env_ref._target() == False:
@@ -132,7 +134,7 @@ seed = 1):
 
     # train agent
     if Curriculum == None:
-        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous, dim_state = dim_state, discrete = discrete)
+        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous, dim_state = dim_state, discrete = discrete, restart = restart)
         callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
         if(method == 'PPO'):
             model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde, sde_sample_freq = 100)
@@ -142,7 +144,7 @@ seed = 1):
         model.learn(total_timesteps= train_timesteps, callback = callback)
         print('End training with seed {}'.format(seed))
     elif Curriculum['type'] == 'auto':
-        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous, dim_state = dim_state, discrete = discrete)
+        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous, dim_state = dim_state, discrete = discrete, restart = restart)
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, learning_rate=linear_schedule(0.001, 0.000005, 0.1), gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde)
         factor = Curriculum['factor']
         callback = TrackCurriculumCallback(eval_env = env, factor = factor, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
@@ -154,7 +156,7 @@ seed = 1):
         constraint = Curriculum['constraint']
         learning_rate = Curriculum['learning_rate']
         ts = Curriculum['ts']
-        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous, dim_state = dim_state, discrete = discrete)
+        env = WindEnv_gym(wind_maps = discrete_maps, wind_lengthscale= wind_lengthscale, alpha = alpha, start = start, target= target, target_radius= radius, dt = dt, propulsion = propulsion, ha = ha, reward_number = reward_number, initial_angle=initial_angle, bonus = bonus, scale = scale, reservoir_info = reservoir_info, continuous = continuous, dim_state = dim_state, discrete = discrete, restart = restart)
         model = PPO("MlpPolicy", env, verbose=0, policy_kwargs = policy_kwargs, gamma = gamma, seed = seed, n_steps = n_steps, batch_size = batch_size, use_sde = use_sde)
         callback = TrackExpectedRewardCallback(eval_env = env, eval_freq = eval_freq, log_dir = dir_name, n_eval_episodes= n_eval_episodes_callback)
         for i in range(len(constraint)):
@@ -163,6 +165,11 @@ seed = 1):
             model.learning_rate = learning_rate[i]
             model.learn(total_timesteps = ts[i], callback = callback)
         
+    ## In the case of random restart training, we have to reconfigure starting point
+    if restart == 'random':
+        env.restart = 'fix'
+        env.start = start
+        env.initial_angle = initial_angle
 
     # Deterministic Path
     ep_reward = 0

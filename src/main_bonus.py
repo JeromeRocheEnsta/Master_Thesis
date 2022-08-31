@@ -22,7 +22,8 @@ if __name__ == "__main__":
         'wind_info' : wind_info_1,
         'continuous' : True,
         'dim_state' : 7,
-        'discrete' : []
+        'discrete' : [],
+        'restart' : 'fix'
     }
     
     model_kwargs = {

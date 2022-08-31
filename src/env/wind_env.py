@@ -12,7 +12,7 @@ from env.utils import reward_1, reward_2, reward_4, reward_sparse, energy
 class WindEnv_gym(gym.Env):
     def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant',
     ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None],
-    continuous = True, dim_state = 5, discrete = []):
+    continuous = True, dim_state = 5, discrete = [], restart = 'fix'):
         super(WindEnv_gym, self).__init__()
         self.continuous = continuous
         if not self.continuous:
@@ -66,6 +66,7 @@ class WindEnv_gym(gym.Env):
         self.initial_angle = initial_angle
 
         ### Starting and target points
+        self.restart = restart
         if start == None:
             self.start = (random.random() * length//2 , (random.random() + 1) * heigth//2 )
         else:
@@ -214,6 +215,10 @@ class WindEnv_gym(gym.Env):
 
     def reset(self):
         # Execute one time step within the environment
+        if self.restart == 'random':
+            self.start[0] = random.random()  * self.length
+            self.start[1] = random.random()  * self.heigth
+            self.initial_angle = random.random()  * 360. 
         self.trajectory_x = [self.start[0]]
         self.trajectory_y = [self.start[1]]
         self.trajectory_ha = [self.initial_angle]
