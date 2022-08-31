@@ -86,7 +86,7 @@ wind_info_4 = {
 }
 
 
-def plot_wind_field(Wind, start, target):
+def plot_wind_field(Wind, start, target, points = True):
     localisation = []
     X = []
     Y = []
@@ -106,11 +106,13 @@ def plot_wind_field(Wind, start, target):
         Z_magnitude[row, col] = prediction_magnitude[i]
         # Z_direction[row, col] = prediction_direction[i]
 
-    fig = plt.figure(figsize=(6, 6))
+    fig = plt.figure(figsize=(6, 6), dpi = 300)
     plt.contourf(X, Y, Z_magnitude, 20, cmap='coolwarm')
-    plt.colorbar()
-    plt.plot(start[0], start[1], 'ko', markersize = 10)
-    plt.plot(target[0], target[1], 'k*', markersize = 10)
+    cb = plt.colorbar()
+    cb.set_label(label='MAGNITUDE (km/h)',weight='bold')
+    if points == True:
+        plt.plot(start[0], start[1], 'ko', markersize = 10)
+        plt.plot(target[0], target[1], 'k*', markersize = 10)
 
 
     localisation = []
