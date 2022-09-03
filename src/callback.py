@@ -47,12 +47,17 @@ class TrackExpectedRewardCallback(BaseCallback):
 
     def _on_step(self) -> bool:
         if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
+            test = False
+            if self.eval_env.restart == 'random':
+                test = True
+                self.eval_env.restart == 'fix'
             expected_reward, expected_length, expected_energy = evaluate_policy(self.model, self.eval_env, self.n_eval_episodes)
             self.timesteps.append(self.n_calls)
             self.expected_rewards.append(expected_reward)
             self.expected_lengths.append(expected_length)
             self.expected_energies.append(expected_energy)
-            
+            if test == True:
+                self.eval_env.restart == 'random'
 
         return True
 

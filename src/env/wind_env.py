@@ -216,34 +216,39 @@ class WindEnv_gym(gym.Env):
     def reset(self):
         # Execute one time step within the environment
         if self.restart == 'random':
-            self.start[0] = random.random()  * self.length
-            self.start[1] = random.random()  * self.heigth
-            self.initial_angle = random.random()  * 360. 
-        self.trajectory_x = [self.start[0]]
-        self.trajectory_y = [self.start[1]]
-        self.trajectory_ha = [self.initial_angle]
+            obs_x = random.random()  * self.length
+            obs_y = random.random()  * self.heigth
+            obs_ha = random.random()  * 360.
+        else:
+            obs_x = self.start[0]
+            obs_y = self.start[1]
+            obs_ha = self.initial_angle
+        
+        self.trajectory_x = [obs_x]
+        self.trajectory_y = [obs_y]
+        self.trajectory_ha = [obs_ha]
         self.trajectory_action = []
         self.energy = [0]
         self.time = [0]
         
         if self.dim_state == 5 or self.dim_state == 7:
-            distance_to_target =  np.sqrt( (self.start[0] - self.target[0])**2 + (self.start[1] - self.target[1])**2 )
-            sign = np.sign(self.target[1] - self.start[1])
-            if(self.start[1] == self.target[0]):
-                direction_to_target =  sign%360
+            distance_to_target =  np.sqrt( (obs_x - self.target[0])**2 + (obs_y - self.target[1])**2 )
+            sign = np.sign(self.target[1] - obs_y)
+            if(obs_x == self.target[0]):
+                direction_to_target =  (sign * 90)% 360
             else:
-                angle = np.arctan((abs(self.start[1] - self.target[1]))/(abs(self.start[0] - self.target[0])))
-                direction_to_target = (sign * angle)%360 if self.start[0] < self.target[0] else 180 + sign * angle
+                angle = np.arctan((abs(obs_y - self.target[1]))/(abs(obs_x - self.target[0])))
+                direction_to_target = (sign * angle)%360 if obs_x < self.target[0] else 180 + sign * angle
         if self.dim_state == 7:
-            magnitude = float(self.wind_map._get_magnitude([(self.start[0], self.start[1])]))
-            direction = float(self.wind_map._get_direction([(self.start[0], self.start[1])])) % 360
+            magnitude = float(self.wind_map._get_magnitude([(obs_x, obs_y)]))
+            direction = float(self.wind_map._get_direction([(obs_x, obs_y)])) % 360
 
         if self.dim_state == 3:
-            self.state = np.array([self.initial_angle, self.start[0], self.start[1]], dtype = np.float)
+            self.state = np.array([obs_ha, obs_x, obs_y], dtype = np.float)
         elif self.dim_state == 5:
-            self.state = np.array([self.initial_angle, self.start[0], self.start[1], distance_to_target, direction_to_target], dtype = np.float)
+            self.state = np.array([obs_ha, obs_x, obs_y, distance_to_target, direction_to_target], dtype = np.float)
         elif self.dim_state == 7:
-            self.state = np.array([self.initial_angle, self.start[0], self.start[1], distance_to_target, direction_to_target, magnitude, direction], dtype = np.float)
+            self.state = np.array([obs_ha, obs_x, obs_y, distance_to_target, direction_to_target, magnitude, direction], dtype = np.float)
 
         self.reservoir = None if self.reservoir_use == False else self.reservoir_capacity
 
