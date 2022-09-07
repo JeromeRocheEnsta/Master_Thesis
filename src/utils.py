@@ -274,10 +274,15 @@ def get_data(seeds, scale = None, bonus = None, gamma = 1):
         mean_length.append(np.mean(lengths))
         mean_energy.append(np.mean(energies))
         if (n > 1) :
+            '''
             t = st.t.ppf(0.975, n-1)
             ci_reward.append(t*np.sqrt(np.var(rewards)/n))
             ci_length.append(t*np.sqrt(np.var(lengths)/n))
             ci_energy.append(t*np.sqrt(np.var(energies)/n))
+            '''
+            ci_reward.append(np.std(rewards))
+            ci_length.append(np.std(lengths))
+            ci_energy.append(np.std(energies))
 
     for seed in seeds:
         exec('file'+str(seed)+'.close()')

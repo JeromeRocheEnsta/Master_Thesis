@@ -193,7 +193,7 @@ seed = 1):
 
 
     # Stochastic Paths
-    for episode in range(10):
+    for episode in range(100):
         ep_reward = 0
         obs = env.reset()
         for i in range(1000):
@@ -216,7 +216,7 @@ seed = 1):
     if MonteCarlo:
         # Monte-Carlo estimator 
         file = open(dir_name+'/MonteCarlo.txt', 'w')
-        for episode in range(2000):
+        for episode in range(500):
             ep_reward = 0
             obs = env.reset()
             for i in range(1000):

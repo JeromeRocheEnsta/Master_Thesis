@@ -30,7 +30,7 @@ if __name__ == "__main__":
     model_kwargs = {
         'gamma' : 1,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 1000000,
+        'train_timesteps' : 400000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64,
@@ -48,9 +48,9 @@ if __name__ == "__main__":
         'reservoir_info' : [False, None]
     }
 
-    seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    #seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     #seeds = [51+i for i in range(50)]
-    #seeds = [1]
+    seeds = [2]
     
     
 
