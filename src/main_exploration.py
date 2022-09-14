@@ -31,7 +31,7 @@ if __name__ == "__main__":
         'continuous' : True,
         'dim_state' : 7,
         'discrete' : [],
-        'restart' : 'random'
+        'restart' : 'fix'
     }
     
     model_kwargs = {
