@@ -6,7 +6,7 @@ from utils import *
 
 Network = {
     1 : [dict(pi = [64,64], vf = [64,64])],
-    2 : [dict(pi = [32,32], vf = [32,32])],
+    #2 : [dict(pi = [32,32], vf = [32,32])],
     #2 : [dict(pi = [100,50,25], vf = [100,50,25])],
     #3 : [dict(pi = [400, 300], vf = [400, 300])],
 }
@@ -14,9 +14,9 @@ Network = {
 Activation  = {
     'relu' : th.nn.ReLU,
     'tanh' : th.nn.Tanh,
-    'leakyrelu' : th.nn.LeakyReLU,
+    #'leakyrelu' : th.nn.LeakyReLU,
     'sigmoig' : th.nn.Sigmoid,
-    'softplus' : th.nn.Softplus
+    #'softplus' : th.nn.Softplus
 }
 
 if __name__ == "__main__":
@@ -35,16 +35,16 @@ if __name__ == "__main__":
         'dt' : 4,
         'initial_angle' : 0,
         'wind_info' : wind_info_1,
-        'continuous' : False,
+        'continuous' : True,
         'dim_state' : 7,
-        'discrete' : [-15, -7.5, -5, -2.5, 0, 2.5, 5, 7.5, 15],
+        'discrete' : [],
         'restart' : 'fix'
     }
     
     model_kwargs = {
-        'gamma' : 0.90,
+        'gamma' : 1,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 200000,
+        'train_timesteps' : 400000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
@@ -52,9 +52,9 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 1,
+        'reward_number' : 4,
         'scale' : 1,
-        'bonus': 10
+        'bonus': 0
     }
 
     constraint_kwargs = {
