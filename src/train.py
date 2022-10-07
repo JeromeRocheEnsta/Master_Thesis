@@ -193,7 +193,7 @@ seed = 1):
 
 
     # Stochastic Paths
-    for episode in range(100):
+    for episode in range(10):
         ep_reward = 0
         obs = env.reset()
         for i in range(1000):
