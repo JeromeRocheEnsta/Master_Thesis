@@ -20,10 +20,10 @@ color = {
 
 if __name__ == "__main__":
     scale = 1
-    bonus = 10
+    bonus = 0
     seeds = [1,2,3,4,5,6,7,8,9,10]
-    #network = ['tanh_1', 'relu_1', 'leakyrelu_1']
-    network = ['tanh_1', 'tanh_2', 'relu_1', 'relu_2', 'sigmoig_1', 'sigmoig_2', 'softplus_1', 'softplus_2']
+    network = ['tanh_1', 'relu_1', 'sigmoig_1']
+    #network = ['tanh_1', 'tanh_2', 'relu_1', 'relu_2', 'sigmoig_1', 'sigmoig_2', 'softplus_1', 'softplus_2']
 
     fig, ax = plt.subplots(1, 3)
     fig.set_size_inches(17, 7)

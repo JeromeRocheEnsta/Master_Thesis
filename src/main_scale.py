@@ -40,9 +40,9 @@ if __name__ == "__main__":
     }
     
     model_kwargs = {
-        'gamma' : 0.9,
+        'gamma' : 1,
         'policy_kwargs' : dict(activation_fn = th.nn.Tanh, net_arch = [dict(pi = [64,64], vf = [64,64])]),
-        'train_timesteps' : 500000,
+        'train_timesteps' : 400000,
         'method' : 'PPO',
         'n_steps' : 2048,
         'batch_size' : 64
@@ -50,9 +50,9 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 1,
+        'reward_number' : 4,
         'scale' : 0.01,
-        'bonus': 1
+        'bonus': 0
     }
 
     constraint_kwargs = {
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
-    scales = [0.01, 0.1, 1, 10, 100, 1000]
+    scales = [0.01, 0.1, 1, 10, 100]
 
     if not os.path.exists('log_files'):
         os.mkdir('log_files')
