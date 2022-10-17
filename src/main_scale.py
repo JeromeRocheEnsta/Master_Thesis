@@ -32,9 +32,9 @@ if __name__ == "__main__":
         'radius' : 30,
         'dt' : 4,
         'initial_angle' : 315,
-        'wind_info' : wind_info_4,
+        'wind_info' : wind_info_1,
         'continuous' : True,
-        'dim_state' : 3,
+        'dim_state' : 7,
         'discrete' : [],
         'restart' : 'fix'
     }
