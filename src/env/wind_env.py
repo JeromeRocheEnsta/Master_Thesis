@@ -12,7 +12,7 @@ from env.utils import reward_1, reward_2, reward_4, reward_sparse, energy
 class WindEnv_gym(gym.Env):
     def __init__(self, dt = 1.8, mu = 20, alpha = 15, length = 1000, heigth = 1000, target_radius = 20, initial_angle = 0,  reward_number = 1, propulsion = 'constant',
     ha = 'propulsion', straight = False, wind_maps = None, wind_lengthscale = None, start = None, target = None, bonus = 10, scale = 1, reservoir_info = [False, None],
-    continuous = True, dim_state = 5, discrete = [], restart = 'fix'):
+    continuous = True, dim_state = 5, discrete = [], restart = 'fix', power = 0.5):
         super(WindEnv_gym, self).__init__()
         self.continuous = continuous
         if not self.continuous:
@@ -32,12 +32,14 @@ class WindEnv_gym(gym.Env):
         else:
             self.ha = ha
         self.scale = scale #Reward scaling
-        self.bonus = bonus # bonus for reaching the goal
+        self.bonus = bonus # bonus for reaching the goal 
         self.magnitude_max = 20
 
 
         ### Choose the reward
         self.reward_number = reward_number
+        if self.reward_number == 1:
+            self.power = power
 
         ### Informative data about the path
         self.trajectory_x = []
@@ -368,7 +370,7 @@ class WindEnv_gym(gym.Env):
     
     def reward(self):
         if (self.reward_number == 1):
-            return reward_1(self.state, self.target, self.length, self.heigth, self.target_radius, self._target(), self.bonus, self.scale)
+            return reward_1(self.state, self.target, self.length, self.heigth, self.target_radius, self._target(), self.power, self.bonus, self.scale)
         elif(self.reward_number == 2):
             magnitude = float(self.wind_map._get_magnitude([(self.state[1], self.state[2])]))
             direction = float(self.wind_map._get_direction([(self.state[1], self.state[2])])) % 360
