@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     reward_kwargs = {
         'reward_number' : 1,
-        'scale' : 0.01,
+        'scale' : 1,
         'bonus': 0,
         'power': 1,
     }
