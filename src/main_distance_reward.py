@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
 
     reward_kwargs = {
-        'reward_number' : 4,
+        'reward_number' : 1,
         'scale' : 0.01,
         'bonus': 0,
         'power': 1,
