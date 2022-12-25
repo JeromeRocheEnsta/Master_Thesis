@@ -4,7 +4,7 @@ import multiprocessing
 import torch as th
 from utils import *
 
-powers = [1, 0.5, 1/3, 0.25, 0.2, 1/6]
+powers = [1.5, 2]
 
 if __name__ == "__main__":
     #########################
