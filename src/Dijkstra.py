@@ -16,7 +16,7 @@ start = (100, 900)
 target = (800, 200)
 
 mu = 20 # km/h
-dt = 0.5 # s
+dt = 4 # s
 
 def number_to_coordinate(x, m):
     column = x % m
@@ -91,7 +91,7 @@ def add_left(wind_map, x, m):
 
 if __name__ == "__main__":
     ## Wind map
-    wind_info = wind_info_4
+    wind_info = wind_info_1
     discrete_maps = get_discrete_maps(wind_info['info'])
     wind_map = WindMap(discrete_maps, wind_info['lengthscale'])
     
@@ -228,10 +228,13 @@ if __name__ == "__main__":
     total_cost = best_path[3]
     path_x = []
     path_y = []
+    file = open('path.txt', 'w')
     for i in range(len(path)):
         x, y = number_to_coordinate(path[i], m)
         path_x.append(float(x))
         path_y.append(float(y))
+        file.write(str(float(x))+' '+str(float(y))+'\n')
+    file.close()
     fig = plot_wind_field(wind_map, start, target)
     print(len(path_x), len(path_y))
     fig.suptitle('Energy consumed : '+str(round(float(total_cost), 2)), fontsize=16)

@@ -188,15 +188,19 @@ seed = 1):
     # Deterministic Path
     ep_reward = 0
     for _ in range(1):
+        file_path = open(dir_name+'/deterministic_path.txt', 'w')
         ep_reward = 0
         obs = env.reset()
+        file_path.write(str(env.state[1])+' '+str(env.state[2])+'\n')
         for i in range(1000):
             action, _states = model.predict(obs, deterministic=True)
             obs, reward, done, info = env.step(action)
+            file_path.write(str(env.state[1])+' '+str(env.state[2])+'\n')
             ep_reward += reward
             env.render()
             if done:
                 break
+        file_path.close()
 
         fig, axs = env.plot_trajectory(ep_reward, ref_trajectory_x = env_ref.trajectory_x, ref_trajectory_y = env_ref.trajectory_y, ref_energy= env_ref.energy, ref_time = env_ref.time)
         if save:
